@@ -20,9 +20,10 @@
       background: var(--bg-primary);
       color: var(--text-primary);
       min-height: 100vh;
+      overflow: hidden;
     }
   </style>
-  <link rel="stylesheet" href="../src/parallel-internet.css">
+  <link rel="stylesheet" href="parallel-internet.css">
 </head>
 <body>
   <div class="parallel-internet-container" id="pi-container">
@@ -33,9 +34,9 @@
         <p class="globe-subtitle">Global LLM Infrastructure Monitor</p>
       </div>
       <div class="globe-controls">
-        <button class="globe-ctrl-btn" onclick="window.parallelInternet.toggleFullscreen('globe')" title="Fullscreen">&#x26F6;</button>
-        <button class="globe-ctrl-btn" onclick="window.parallelInternet.resetGlobe()" title="Reset View">&#x21BA;</button>
-        <button class="globe-ctrl-btn active" onclick="window.parallelInternet.toggleRotation()" id="rotation-btn" title="Pause/Resume">&#x27F3;</button>
+        <button class="globe-ctrl-btn" onclick="window.parallelInternet.toggleFullscreen('globe')" title="Fullscreen">⛶</button>
+        <button class="globe-ctrl-btn" onclick="window.parallelInternet.resetGlobe()" title="Reset View">↺</button>
+        <button class="globe-ctrl-btn active" onclick="window.parallelInternet.toggleRotation()" id="rotation-btn" title="Pause/Resume">⟳</button>
       </div>
       <div id="globe-canvas-container" class="globe-canvas">
         <div class="globe-loading">
@@ -70,7 +71,42 @@
     <div class="providers-panel" id="data-section">
       <div class="panel-header">
         <span class="panel-title">LLM Providers <span class="provider-count" id="provider-count">(27)</span></span>
-        <button class="globe-ctrl-btn" onclick="window.parallelInternet.toggleFullscreen('data')" title="Fullscreen">&#x26F6;</button>
+        <div class="view-toggle">
+          <button class="view-btn active">Cards</button>
+          <button class="view-btn">List</button>
+          <button class="globe-ctrl-btn" onclick="window.parallelInternet.toggleFullscreen('data')" title="Fullscreen">⛶</button>
+        </div>
+      </div>
+
+      <!-- Live Stats Bar -->
+      <div class="live-stats-bar">
+        <div class="live-stat">
+          <span class="live-stat-label">Requests/min</span>
+          <span class="live-stat-value" id="requests-per-min">0</span>
+        </div>
+        <div class="live-stat">
+          <span class="live-stat-label">Active APIs</span>
+          <span class="live-stat-value green" id="active-apis">27</span>
+        </div>
+        <div class="live-stat">
+          <span class="live-stat-label">Avg Response</span>
+          <span class="live-stat-value" id="avg-response">0ms</span>
+        </div>
+        <div class="live-stat">
+          <span class="live-stat-label">Fastest</span>
+          <span class="live-stat-value green" id="fastest-provider">-</span>
+        </div>
+      </div>
+
+      <!-- Quick Comparison -->
+      <div class="quick-comparison">
+        <div class="comparison-header">
+          <span class="comparison-title">Quick Compare</span>
+          <span class="comparison-hint">Click ⚖ to compare</span>
+        </div>
+        <div class="comparison-slots" id="comparison-slots">
+          <div class="comparison-empty">Select providers to compare</div>
+        </div>
       </div>
 
       <!-- Filter Pills -->
@@ -80,17 +116,8 @@
         <button class="filter-pill" data-filter="inference" onclick="window.parallelInternet.setFilter('inference')">Fast Inference</button>
         <button class="filter-pill" data-filter="opensource" onclick="window.parallelInternet.setFilter('opensource')">Open Source</button>
         <button class="filter-pill" data-filter="cloud" onclick="window.parallelInternet.setFilter('cloud')">Cloud</button>
-      </div>
-
-      <!-- Quick Comparison -->
-      <div class="quick-comparison">
-        <div class="comparison-header">
-          <span class="comparison-title">Quick Compare</span>
-          <span class="comparison-hint">Click &#x2696; to compare</span>
-        </div>
-        <div class="comparison-slots" id="comparison-slots">
-          <div class="comparison-empty">Select providers to compare</div>
-        </div>
+        <button class="filter-pill" data-filter="enterprise" onclick="window.parallelInternet.setFilter('enterprise')">Enterprise</button>
+        <button class="filter-pill" data-filter="aggregator" onclick="window.parallelInternet.setFilter('aggregator')">Aggregator</button>
       </div>
 
       <!-- Provider Cards -->
@@ -105,6 +132,6 @@
   </div>
 
   <script src="lib/three.min.js"></script>
-  <script src="../src/parallel-internet.js"></script>
+  <script src="parallel-internet.js"></script>
 </body>
 </html>
