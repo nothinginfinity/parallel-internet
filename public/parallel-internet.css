@@ -2445,3 +2445,159 @@
   transform: translateY(-2px);
   box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4);
 }
+
+/* ============================================
+   VISUAL QUERY SYSTEM - MINI INFO PANES
+   ============================================ */
+
+.mini-info-pane {
+  position: absolute;
+  width: 160px;
+  background: rgba(10, 15, 30, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  padding: 8px;
+  z-index: 100;
+  pointer-events: auto;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  animation: miniPaneIn 0.4s ease forwards;
+}
+
+@keyframes miniPaneIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.mini-pane-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mini-pane-logo {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.mini-pane-name {
+  flex: 1;
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mini-pane-expand {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  transition: all 0.2s;
+}
+
+.mini-pane-expand:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.mini-pane-body {
+  margin-top: 8px;
+  overflow: hidden;
+  max-height: 200px;
+  transition: max-height 0.3s ease, margin-top 0.3s ease;
+}
+
+.mini-pane-body.collapsed {
+  max-height: 0;
+  margin-top: 0;
+}
+
+.mini-stat {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.7);
+  padding: 2px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.mini-stat:last-child {
+  border-bottom: none;
+}
+
+/* ============================================
+   VISUAL QUERY SYSTEM - ADD PROMPT
+   ============================================ */
+
+.add-prompt {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.add-prompt button {
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.add-prompt-yes {
+  background: #22c55e;
+  color: white;
+}
+
+.add-prompt-yes:hover {
+  background: #16a34a;
+  transform: translateY(-1px);
+}
+
+.add-prompt-edit {
+  background: #3b82f6;
+  color: white;
+}
+
+.add-prompt-edit:hover {
+  background: #2563eb;
+  transform: translateY(-1px);
+}
+
+.add-prompt-no {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.add-prompt-no:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.add-prompt-container {
+  animation: fadeIn 0.3s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

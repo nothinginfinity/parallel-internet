@@ -600,6 +600,506 @@
   ];
 
   // ============================================
+  // VISUAL QUERY SYSTEM
+  // ============================================
+
+  // Alias map for fuzzy company matching
+  const COMPANY_ALIASES = {
+    'xai': ['x.ai', 'x ai', 'x.com', 'elon', 'grok', 'grok-2'],
+    'openai': ['open ai', 'chatgpt', 'chat gpt', 'gpt-4', 'gpt4', 'gpt-4o', 'dalle', 'dall-e', 'o1'],
+    'anthropic': ['claude', 'sonnet', 'opus', 'haiku', 'claude 3'],
+    'google-deepmind': ['google', 'deepmind', 'gemini', 'bard', 'palm', 'gemini 2'],
+    'meta-ai': ['meta', 'llama', 'facebook', 'llama 3'],
+    'mistral': ['mistral ai', 'mixtral', 'le chat', 'codestral'],
+    'deepseek': ['deep seek', 'deepseek-v3', 'deepseek r1'],
+    'cohere': ['command r', 'command-r'],
+    'groq': ['groq cloud'],
+    'cerebras': ['cerebras ai'],
+    'together-ai': ['together', 'together.ai'],
+    'fireworks': ['fireworks ai', 'fireworks.ai'],
+    'perplexity': ['perplexity ai', 'pplx'],
+    'huggingface': ['hugging face', 'hf'],
+    'replicate': ['replicate.com'],
+    'ai21': ['ai21 labs', 'jurassic'],
+    'amazon-bedrock': ['bedrock', 'aws bedrock'],
+    'azure-openai': ['azure ai', 'azure openai'],
+    'google-vertex': ['vertex ai', 'vertex'],
+    'alibaba-qwen': ['qwen', 'alibaba ai', 'tongyi'],
+    'nvidia-nim': ['nvidia', 'nim', 'nemotron']
+  };
+
+  // AI-related patterns for detecting unknown company mentions
+  const AI_COMPANY_PATTERNS = [
+    /\b(ai|ml|llm|gpt|model|neural|deep\s?learning)\b/i,
+    /\b(labs?|research|intelligence)\b/i
+  ];
+
+  // Orbital animation state
+  let originalMarkerPositions = new Map();
+  let orbitAnimationActive = false;
+  let miniPanes = [];
+
+  // Identify companies mentioned in a query
+  function identifyMentionedCompanies(query) {
+    const q = query.toLowerCase();
+    const matches = [];
+    const matchedIds = new Set();
+
+    LLM_PROVIDERS.forEach(provider => {
+      // Skip if already matched
+      if (matchedIds.has(provider.id)) return;
+
+      // Direct name match
+      if (q.includes(provider.name.toLowerCase())) {
+        matches.push(provider);
+        matchedIds.add(provider.id);
+        return;
+      }
+
+      // Direct id match
+      if (q.includes(provider.id)) {
+        matches.push(provider);
+        matchedIds.add(provider.id);
+        return;
+      }
+
+      // Model name match
+      if (provider.models?.some(m => q.includes(m.toLowerCase()))) {
+        matches.push(provider);
+        matchedIds.add(provider.id);
+        return;
+      }
+
+      // Alias match
+      const providerAliases = COMPANY_ALIASES[provider.id] || [];
+      if (providerAliases.some(alias => q.includes(alias.toLowerCase()))) {
+        matches.push(provider);
+        matchedIds.add(provider.id);
+      }
+    });
+
+    return matches;
+  }
+
+  // Detect unknown company mentions (capitalized words not in dataset)
+  function detectUnknownCompanyMentions(query, foundCompanies) {
+    const unknown = [];
+    const foundNames = new Set(foundCompanies.map(c => c.name.toLowerCase()));
+    const foundIds = new Set(foundCompanies.map(c => c.id));
+
+    // Look for capitalized words that might be company names
+    const potentialNames = query.match(/\b[A-Z][a-zA-Z]+(?:\s+[A-Z][a-zA-Z]+)*\b/g) || [];
+
+    potentialNames.forEach(name => {
+      const lower = name.toLowerCase();
+      // Skip if already found
+      if (foundNames.has(lower) || foundIds.has(lower)) return;
+      // Skip common words
+      if (['The', 'What', 'How', 'Tell', 'About', 'Compare', 'Which', 'Where', 'When', 'Who', 'Can', 'Does', 'Is', 'Are'].includes(name)) return;
+
+      // Check if query has AI context clues
+      if (AI_COMPANY_PATTERNS.some(p => p.test(query))) {
+        unknown.push(name);
+      }
+    });
+
+    return unknown;
+  }
+
+  // Animate markers to orbital positions
+  function animateToOrbit(providerIds) {
+    if (providerIds.length === 0) return;
+
+    // Stop globe rotation
+    autoRotate = false;
+    orbitAnimationActive = true;
+
+    // Store original positions
+    markers.forEach(m => {
+      if (!originalMarkerPositions.has(m.userData.id)) {
+        originalMarkerPositions.set(m.userData.id, m.position.clone());
+      }
+    });
+
+    // Calculate orbital positions (front-facing arc)
+    const angleStep = Math.PI / (providerIds.length + 1);
+    const orbitRadius = 1.8;
+
+    providerIds.forEach((id, index) => {
+      const marker = markers.find(m => m.userData.id === id);
+      if (!marker) return;
+
+      const angle = angleStep * (index + 1) - Math.PI / 2;
+      const targetPos = new THREE.Vector3(
+        Math.sin(angle) * orbitRadius,
+        0.2 + (index * 0.15),
+        Math.cos(angle) * orbitRadius * 0.6
+      );
+
+      // Animate marker to orbital position
+      animateMarkerTo(marker, targetPos, 800);
+
+      // Scale up
+      animateScale(marker, 2.5, 600);
+    });
+
+    // Fade non-relevant markers
+    markers.forEach(m => {
+      if (!providerIds.includes(m.userData.id)) {
+        animateOpacity(m, 0.15, 400);
+      }
+    });
+  }
+
+  // Reset orbital view
+  function resetOrbit() {
+    orbitAnimationActive = false;
+
+    markers.forEach(m => {
+      const original = originalMarkerPositions.get(m.userData.id);
+      if (original) {
+        animateMarkerTo(m, original, 600);
+      }
+      animateScale(m, 1, 400);
+      animateOpacity(m, 1, 400);
+    });
+
+    originalMarkerPositions.clear();
+    clearMiniPanes();
+  }
+
+  // Animate marker to position
+  function animateMarkerTo(marker, targetPos, duration) {
+    const startPos = marker.position.clone();
+    const startTime = Date.now();
+
+    function tick() {
+      const elapsed = Date.now() - startTime;
+      const t = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - t, 3); // easeOutCubic
+
+      marker.position.lerpVectors(startPos, targetPos, eased);
+
+      if (t < 1) requestAnimationFrame(tick);
+    }
+    tick();
+  }
+
+  // Animate marker scale
+  function animateScale(marker, targetScale, duration) {
+    const startScale = marker.scale.x;
+    const startTime = Date.now();
+
+    function tick() {
+      const elapsed = Date.now() - startTime;
+      const t = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - t, 3);
+
+      const scale = startScale + (targetScale - startScale) * eased;
+      marker.scale.setScalar(scale);
+
+      // Also scale glow
+      const glow = glowMeshes.find(g => g.userData.markerId === marker.userData.id);
+      if (glow) glow.scale.setScalar(scale * 1.6);
+
+      if (t < 1) requestAnimationFrame(tick);
+    }
+    tick();
+  }
+
+  // Animate marker opacity
+  function animateOpacity(marker, targetOpacity, duration) {
+    const startOpacity = marker.material.opacity;
+    const startTime = Date.now();
+
+    function tick() {
+      const elapsed = Date.now() - startTime;
+      const t = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - t, 3);
+
+      marker.material.opacity = startOpacity + (targetOpacity - startOpacity) * eased;
+
+      // Also fade glow
+      const glow = glowMeshes.find(g => g.userData.markerId === marker.userData.id);
+      if (glow) glow.material.opacity = targetOpacity * 0.3;
+
+      if (t < 1) requestAnimationFrame(tick);
+    }
+    tick();
+  }
+
+  // Show mini info panes for providers
+  function showMiniPanes(providers) {
+    clearMiniPanes();
+
+    const container = document.getElementById('pi-container') || document.getElementById('globe-canvas-container')?.parentElement;
+    if (!container) return;
+
+    providers.forEach((provider, index) => {
+      const pane = document.createElement('div');
+      pane.className = 'mini-info-pane';
+      pane.dataset.providerId = provider.id;
+      pane.innerHTML = `
+        <div class="mini-pane-header">
+          <span class="mini-pane-logo" style="background:${provider.color}20;color:${provider.color}">${provider.logo}</span>
+          <span class="mini-pane-name">${provider.name}</span>
+          <button class="mini-pane-expand" onclick="window.parallelInternet.expandMiniPane('${provider.id}')">+</button>
+        </div>
+        <div class="mini-pane-body collapsed">
+          <div class="mini-stat">Speed: ${provider.performance?.tokensPerSec || 0} tok/s</div>
+          <div class="mini-stat">Price: $${provider.pricing?.output || 0}/M</div>
+          <div class="mini-stat">Context: ${formatNumber(provider.contextWindow?.reported || 0)}</div>
+          ${provider.models ? `<div class="mini-stat">Models: ${provider.models.slice(0,2).join(', ')}</div>` : ''}
+        </div>
+      `;
+
+      container.appendChild(pane);
+      miniPanes.push({ element: pane, providerId: provider.id });
+    });
+
+    // Start tracking positions
+    updateMiniPanePositions();
+  }
+
+  // Update mini pane positions to track markers
+  function updateMiniPanePositions() {
+    if (miniPanes.length === 0 || !camera || !renderer) return;
+
+    miniPanes.forEach(({ element, providerId }) => {
+      const marker = markers.find(m => m.userData.id === providerId);
+      if (!marker) return;
+
+      // Project 3D position to screen coordinates
+      const vector = marker.position.clone();
+      vector.project(camera);
+
+      const canvas = renderer.domElement;
+      const x = (vector.x * 0.5 + 0.5) * canvas.clientWidth;
+      const y = (-(vector.y * 0.5) + 0.5) * canvas.clientHeight;
+
+      // Position pane below marker, clamped to viewport
+      const paneWidth = 160;
+      const paneX = Math.max(10, Math.min(x - paneWidth / 2, canvas.clientWidth - paneWidth - 10));
+      const paneY = Math.max(10, Math.min(y + 50, canvas.clientHeight - 150));
+
+      element.style.left = `${paneX}px`;
+      element.style.top = `${paneY}px`;
+    });
+
+    if (orbitAnimationActive) {
+      requestAnimationFrame(updateMiniPanePositions);
+    }
+  }
+
+  // Expand/collapse mini pane
+  function expandMiniPane(providerId) {
+    const pane = miniPanes.find(p => p.providerId === providerId);
+    if (!pane) return;
+
+    const body = pane.element.querySelector('.mini-pane-body');
+    body.classList.toggle('collapsed');
+
+    const btn = pane.element.querySelector('.mini-pane-expand');
+    btn.textContent = body.classList.contains('collapsed') ? '+' : '-';
+  }
+
+  // Clear mini panes
+  function clearMiniPanes() {
+    miniPanes.forEach(p => p.element.remove());
+    miniPanes = [];
+  }
+
+  // ============================================
+  // DYNAMIC COMPANY DISCOVERY
+  // ============================================
+
+  let _pendingDiscoveredCompany = null;
+
+  // Look up unknown company via APIs
+  async function lookupUnknownCompany(companyName) {
+    appendChatMessage('assistant', `Let me look up **${companyName}**...`);
+
+    try {
+      const searchResults = await fetchCompanyInfo(companyName);
+
+      if (searchResults.found) {
+        const discoveredData = searchResults.data;
+        _pendingDiscoveredCompany = discoveredData;
+
+        appendChatMessage('assistant',
+          `Found **${discoveredData.name}**:\n\n` +
+          `- Category: ${discoveredData.category || 'Unknown'}\n` +
+          `- HQ: ${discoveredData.hq || 'Unknown'}\n` +
+          (discoveredData.ticker ? `- Ticker: ${discoveredData.ticker}\n` : '') +
+          (discoveredData.website ? `- Website: ${discoveredData.website}\n` : '') +
+          `\nWould you like to add this company to the globe?`
+        );
+
+        showAddPrompt(discoveredData);
+      } else {
+        appendChatMessage('assistant',
+          `I couldn't find reliable data on **${companyName}**. ` +
+          `Would you like to add it manually?`
+        );
+        // Pre-fill the add form with the name
+        const form = document.getElementById('add-company-form');
+        if (form) {
+          const nameInput = form.querySelector('input[name="name"]');
+          if (nameInput) nameInput.value = companyName;
+        }
+        showAddCompanyForm();
+      }
+    } catch (error) {
+      console.error('Company lookup failed:', error);
+      appendChatMessage('assistant',
+        `I couldn't look up **${companyName}** right now. ` +
+        `You can add it manually using the + button.`
+      );
+    }
+  }
+
+  // Fetch company info from APIs (Yahoo Finance for now)
+  async function fetchCompanyInfo(companyName) {
+    // Try Yahoo Finance (no API key needed)
+    try {
+      const response = await fetch(
+        `https://query1.finance.yahoo.com/v1/finance/search?q=${encodeURIComponent(companyName)}&quotesCount=5&newsCount=0`
+      );
+      const data = await response.json();
+
+      if (data.quotes && data.quotes.length > 0) {
+        const quote = data.quotes[0];
+        return {
+          found: true,
+          data: {
+            id: quote.symbol?.toLowerCase() || companyName.toLowerCase().replace(/\s+/g, '-'),
+            name: quote.longname || quote.shortname || companyName,
+            logo: (quote.shortname || companyName).charAt(0).toUpperCase(),
+            color: '#3b82f6',
+            status: 'unknown',
+            location: { lat: 37.7749, lon: -122.4194 }, // Default to SF, user can edit
+            category: quote.typeDisp === 'Equity' ? 'enterprise' : 'unknown',
+            models: [],
+            pricing: { input: 0, output: 0, cachedInput: 0 },
+            contextWindow: { reported: 0, actual: 0 },
+            performance: { latency: 0, tokensPerSec: 0 },
+            monthlyTokens: 0,
+            trend: 'stable',
+            founded: '',
+            hq: quote.exchDisp || 'Unknown',
+            website: null,
+            ticker: quote.symbol,
+            exchange: quote.exchange,
+            isDiscovered: true
+          }
+        };
+      }
+    } catch (error) {
+      console.error('Yahoo Finance lookup failed:', error);
+    }
+
+    return { found: false };
+  }
+
+  // Show add prompt in chat
+  function showAddPrompt(discoveredData) {
+    const messagesContainer = document.getElementById('pi-chat-messages');
+    if (!messagesContainer) return;
+
+    const promptDiv = document.createElement('div');
+    promptDiv.className = 'pi-chat-message assistant add-prompt-container';
+    promptDiv.innerHTML = `
+      <div class="add-prompt">
+        <button class="add-prompt-yes" onclick="window.parallelInternet.confirmAddCompany()">
+          Yes, add to globe
+        </button>
+        <button class="add-prompt-edit" onclick="window.parallelInternet.editBeforeAdd()">
+          Edit first
+        </button>
+        <button class="add-prompt-no" onclick="window.parallelInternet.dismissAddPrompt()">
+          No thanks
+        </button>
+      </div>
+    `;
+    messagesContainer.appendChild(promptDiv);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+  }
+
+  // Confirm adding discovered company
+  function confirmAddCompany() {
+    const data = _pendingDiscoveredCompany;
+    if (!data) return;
+
+    // Add to LLM_PROVIDERS
+    LLM_PROVIDERS.push(data);
+
+    // Add marker to globe
+    addMarkerForProvider(data);
+
+    // Animate to show new marker
+    animateToOrbit([data.id]);
+    setTimeout(() => showMiniPanes([data]), 500);
+
+    appendChatMessage('assistant',
+      `Added **${data.name}** to the globe! Click on it to see details or edit the information.`
+    );
+
+    _pendingDiscoveredCompany = null;
+    dismissAddPrompt();
+  }
+
+  // Edit before adding
+  function editBeforeAdd() {
+    const data = _pendingDiscoveredCompany;
+    if (!data) return;
+
+    // Pre-fill add form with discovered data
+    const form = document.getElementById('add-company-form');
+    if (form) {
+      const fields = ['name', 'category', 'founded', 'hq', 'website'];
+      fields.forEach(field => {
+        const input = form.querySelector(`[name="${field}"]`);
+        if (input && data[field]) input.value = data[field];
+      });
+    }
+
+    showAddCompanyForm();
+    dismissAddPrompt();
+  }
+
+  // Dismiss add prompt
+  function dismissAddPrompt() {
+    const prompt = document.querySelector('.add-prompt-container');
+    if (prompt) prompt.remove();
+    _pendingDiscoveredCompany = null;
+  }
+
+  // Find relationships between companies
+  function findRelationships(companies) {
+    const relationships = [];
+    const ids = new Set(companies.map(c => c.id));
+
+    companies.forEach(c => {
+      if (!c.relationships) return;
+
+      Object.entries(c.relationships).forEach(([type, related]) => {
+        if (!Array.isArray(related)) return;
+        related.forEach(relId => {
+          if (ids.has(relId)) {
+            const other = companies.find(x => x.id === relId);
+            if (other) {
+              const label = type.replace(/_/g, ' ');
+              relationships.push(`${c.name} ↔ ${other.name} (${label})`);
+            }
+          }
+        });
+      });
+    });
+
+    return [...new Set(relationships)];
+  }
+
+  // ============================================
   // INITIALIZATION
   // ============================================
 
@@ -2117,6 +2617,11 @@
     const content = input.value.trim();
     if (!content) return;
 
+    // Reset any active orbit before new query
+    if (orbitAnimationActive) {
+      resetOrbit();
+    }
+
     // Add user message to UI
     appendChatMessage('user', content);
     input.value = '';
@@ -2124,8 +2629,38 @@
     // Add to history
     chatHistory.push({ role: 'user', content });
 
-    // Get data context for LLM
+    // === VISUAL QUERY PROCESSING ===
+
+    // 1. Identify mentioned companies
+    const mentionedCompanies = identifyMentionedCompanies(content);
+
+    // 2. Check for unknown company mentions
+    const unknownMentions = detectUnknownCompanyMentions(content, mentionedCompanies);
+
+    // 3. If unknown companies detected, look them up
+    if (unknownMentions.length > 0) {
+      for (const unknown of unknownMentions) {
+        await lookupUnknownCompany(unknown);
+      }
+      return; // Wait for user response before continuing
+    }
+
+    // 4. Animate to orbit if companies found
+    if (mentionedCompanies.length > 0) {
+      const providerIds = mentionedCompanies.map(p => p.id);
+      animateToOrbit(providerIds);
+
+      // Show mini panes after animation settles
+      setTimeout(() => {
+        showMiniPanes(mentionedCompanies);
+      }, 500);
+    }
+
+    // === END VISUAL QUERY ===
+
+    // Get data context for LLM with mentioned companies
     const dataContext = getDataContext();
+    dataContext.mentionedCompanies = mentionedCompanies;
 
     // Build system prompt with data context
     const systemPrompt = buildDataAwarePrompt(dataContext);
@@ -2182,6 +2717,42 @@ Answer questions about LLM providers, pricing, performance, and capabilities. Be
   function generateMockResponse(query, ctx) {
     const q = query.toLowerCase();
 
+    // === VISUAL QUERY: Handle mentioned companies first ===
+    if (ctx.mentionedCompanies && ctx.mentionedCompanies.length > 0) {
+      const companies = ctx.mentionedCompanies;
+
+      // Single company - detailed info
+      if (companies.length === 1) {
+        const c = companies[0];
+        return `**${c.name}** (${c.category || 'AI Provider'})\n\n` +
+          `- Speed: ${c.performance?.tokensPerSec || 'N/A'} tokens/sec\n` +
+          `- Price: $${c.pricing?.output || 0}/M output tokens\n` +
+          `- Context: ${formatNumber(c.contextWindow?.reported || 0)} tokens\n` +
+          `- Models: ${c.models?.slice(0, 3).join(', ') || 'N/A'}\n\n` +
+          `Founded ${c.founded || 'N/A'} in ${c.hq || 'Unknown'}.`;
+      }
+
+      // Multiple companies - comparison
+      let response = `Here's what I found about ${companies.map(c => `**${c.name}**`).join(' and ')}:\n\n`;
+
+      companies.forEach(c => {
+        response += `**${c.name}**: ${c.performance?.tokensPerSec || 0} tok/s, $${c.pricing?.output || 0}/M, ${formatNumber(c.contextWindow?.reported || 0)} context\n`;
+      });
+
+      // Add relationship info if available
+      const relationships = findRelationships(companies);
+      if (relationships.length > 0) {
+        response += `\n**Relationships:**\n`;
+        relationships.forEach(r => {
+          response += `- ${r}\n`;
+        });
+      }
+
+      return response;
+    }
+    // === END VISUAL QUERY ===
+
+    // General queries (no specific company mentioned)
     if (q.includes('fastest') || q.includes('speed')) {
       const fastest = ctx.stats.fastestProvider;
       return `The fastest provider is **${fastest.name}** with ${fastest.performance.tokensPerSec} tokens/second. For comparison, the average is ${ctx.stats.avgLatency}s latency.`;
@@ -2402,7 +2973,18 @@ Answer questions about LLM providers, pricing, performance, and capabilities. Be
     startDragPanel,
     showAddCompanyForm,
     hideAddCompanyForm,
-    submitNewCompany
+    submitNewCompany,
+    // Phase 6: Visual Query System
+    identifyMentionedCompanies,
+    animateToOrbit,
+    resetOrbit,
+    showMiniPanes,
+    clearMiniPanes,
+    expandMiniPane,
+    lookupUnknownCompany,
+    confirmAddCompany,
+    editBeforeAdd,
+    dismissAddPrompt
   };
 
   // Initialize when DOM is ready
