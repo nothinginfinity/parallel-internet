@@ -1358,8 +1358,20 @@
         globe.rotation.x = 0;
         globe.rotation.y = 0;
       }
+      camera.position.z = 3; // Reset zoom
       autoRotate = true;
     });
+
+    // Wheel zoom
+    canvas.addEventListener('wheel', (event) => {
+      event.preventDefault();
+      const zoomSpeed = 0.001;
+      const minZoom = 1.5;
+      const maxZoom = 6;
+
+      camera.position.z += event.deltaY * zoomSpeed;
+      camera.position.z = Math.max(minZoom, Math.min(maxZoom, camera.position.z));
+    }, { passive: false });
   }
 
   function checkHover(event) {
@@ -1752,7 +1764,8 @@
     panel.innerHTML = `
       <!-- Drag Handle -->
       <div class="panel-drag-handle" onmousedown="window.parallelInternet.startDragPanel(event)">
-        <button onclick="window.parallelInternet.closeDetail()"
+        <button onclick="event.stopPropagation(); window.parallelInternet.closeDetail()"
+                onmousedown="event.stopPropagation()"
                 style="background: none; border: none; color: rgba(255,255,255,0.5); cursor: pointer; font-size: 20px; padding: 0; margin-left: auto;">×</button>
       </div>
 
