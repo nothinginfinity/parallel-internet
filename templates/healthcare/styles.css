@@ -1,0 +1,52 @@
+/* Parallel Internet - Healthcare Template Styles */
+
+:root {
+  --pi-primary: #ef4444;
+  --pi-secondary: #b91c1c;
+  --pi-accent: #f87171;
+  --pi-warning: #f59e0b;
+  --pi-success: #22c55e;
+}
+
+.pi-globe-container {
+  background: linear-gradient(135deg, #0f0a0a 0%, #1f1414 50%, #0f0a0a 100%);
+}
+
+.pi-globe-title {
+  color: #ef4444;
+  text-shadow: 0 0 30px rgba(239, 68, 68, 0.5);
+}
+
+.pi-card {
+  border-left: 3px solid #ef4444;
+}
+
+.pi-card:hover {
+  border-left-color: #f87171;
+}
+
+.pi-card.active {
+  background: rgba(239, 68, 68, 0.1);
+  border-left-color: #f87171;
+}
+
+.pi-ticker-value.primary {
+  color: #ef4444;
+}
+
+.pi-ticker-value.warning {
+  color: #f59e0b;
+}
+
+.pi-filter-pill.active {
+  background: #ef4444;
+  border-color: #ef4444;
+}
+
+.pi-card-list::-webkit-scrollbar-thumb {
+  background: #ef4444;
+}
+
+.pi-detail-panel {
+  border-left: 3px solid #ef4444;
+}

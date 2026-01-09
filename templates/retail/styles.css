@@ -1,0 +1,71 @@
+/* Parallel Internet - Retail Template Styles */
+/* Stores, franchises, showrooms */
+
+:root {
+  --pi-primary: #10b981;
+  --pi-secondary: #047857;
+  --pi-accent: #34d399;
+  --pi-warning: #f59e0b;
+  --pi-danger: #ef4444;
+}
+
+/* Globe background */
+.pi-globe-container {
+  background: linear-gradient(135deg, #0a0f0a 0%, #0d1f14 50%, #0a0f0a 100%);
+}
+
+/* Title styling */
+.pi-globe-title {
+  color: #10b981;
+  text-shadow: 0 0 30px rgba(16, 185, 129, 0.5);
+}
+
+/* Card styling */
+.pi-card {
+  border-left: 3px solid #10b981;
+}
+
+.pi-card:hover {
+  border-left-color: #34d399;
+}
+
+.pi-card.active {
+  background: rgba(16, 185, 129, 0.1);
+  border-left-color: #34d399;
+}
+
+/* Status badges */
+.pi-badge.open {
+  background: rgba(34, 197, 94, 0.2);
+  color: #22c55e;
+}
+
+.pi-badge.closed {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+
+/* Ticker */
+.pi-ticker-value.primary {
+  color: #10b981;
+}
+
+.pi-ticker-value.warning {
+  color: #f59e0b;
+}
+
+/* Filter pills */
+.pi-filter-pill.active {
+  background: #10b981;
+  border-color: #10b981;
+}
+
+/* Scrollbar */
+.pi-card-list::-webkit-scrollbar-thumb {
+  background: #10b981;
+}
+
+/* Detail panel accents */
+.pi-detail-panel {
+  border-left: 3px solid #10b981;
+}

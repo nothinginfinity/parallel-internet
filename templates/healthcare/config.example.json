@@ -1,0 +1,89 @@
+{
+  "business": {
+    "name": "CareFirst Medical Group",
+    "tagline": "Quality Healthcare for Your Family",
+    "logo": null,
+    "primaryColor": "#ef4444",
+    "secondaryColor": "#b91c1c",
+    "industry": "healthcare"
+  },
+  "locations": [
+    {
+      "id": "main-hospital",
+      "name": "CareFirst Main Hospital",
+      "lat": 34.0622,
+      "lon": -118.3237,
+      "address": "100 Medical Center Dr",
+      "city": "Los Angeles",
+      "state": "CA",
+      "zip": "90024",
+      "phone": "(310) 555-CARE",
+      "color": "#ef4444",
+      "status": "open",
+      "facilityType": "Hospital",
+      "waitTime": 25,
+      "satisfaction": 92,
+      "rating": 4.5,
+      "emergencyRoom": true,
+      "services": ["Emergency", "Surgery", "Cardiology", "Oncology", "Pediatrics", "Maternity"],
+      "insurance": ["Blue Cross", "Aetna", "United", "Medicare", "Medicaid"],
+      "links": {
+        "booking": "https://example.com/book",
+        "telehealth": "https://example.com/telehealth",
+        "directions": "https://maps.google.com/?q=100+Medical+Center+Dr+LA"
+      }
+    },
+    {
+      "id": "urgent-care-westside",
+      "name": "CareFirst Urgent Care - Westside",
+      "lat": 34.0195,
+      "lon": -118.4912,
+      "address": "200 Ocean Ave",
+      "city": "Santa Monica",
+      "state": "CA",
+      "zip": "90401",
+      "phone": "(310) 555-FAST",
+      "color": "#f87171",
+      "status": "open",
+      "facilityType": "Urgent Care",
+      "waitTime": 15,
+      "satisfaction": 88,
+      "rating": 4.2,
+      "emergencyRoom": false,
+      "services": ["Walk-in Care", "X-Ray", "Lab Work", "Minor Injuries"],
+      "insurance": ["Blue Cross", "Aetna", "United"],
+      "links": {
+        "booking": "https://example.com/book-urgent"
+      }
+    },
+    {
+      "id": "clinic-pasadena",
+      "name": "CareFirst Family Clinic",
+      "lat": 34.1478,
+      "lon": -118.1445,
+      "address": "300 Colorado Blvd",
+      "city": "Pasadena",
+      "state": "CA",
+      "zip": "91101",
+      "phone": "(626) 555-WELL",
+      "color": "#b91c1c",
+      "status": "open",
+      "facilityType": "Clinic",
+      "waitTime": 45,
+      "satisfaction": 85,
+      "rating": 4.0,
+      "emergencyRoom": false,
+      "services": ["Primary Care", "Vaccinations", "Wellness Exams", "Chronic Care"],
+      "insurance": ["Blue Cross", "Aetna", "Medicare"],
+      "links": {
+        "booking": "https://example.com/book-clinic",
+        "telehealth": "https://example.com/telehealth"
+      }
+    }
+  ],
+  "ui": {
+    "showTicker": true,
+    "showSidebar": true,
+    "globeAutoRotate": true
+  }
+}

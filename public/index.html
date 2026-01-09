@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parallel Internet - Global LLM Dashboard</title>
+  <style>
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #12121a;
+      --bg-tertiary: #1a1a25;
+      --text-primary: #ffffff;
+      --text-secondary: rgba(255,255,255,0.6);
+      --border: rgba(255,255,255,0.1);
+      --accent-primary: #3b82f6;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+    }
+  </style>
+  <link rel="stylesheet" href="../src/parallel-internet.css">
+</head>
+<body>
+  <div class="parallel-internet-container" id="pi-container">
+    <!-- Globe Visualization -->
+    <div class="globe-container" id="globe-section">
+      <div class="globe-overlay">
+        <h2 class="globe-title">Parallel Internet</h2>
+        <p class="globe-subtitle">Global LLM Infrastructure Monitor</p>
+      </div>
+      <div class="globe-controls">
+        <button class="globe-ctrl-btn" onclick="window.parallelInternet.toggleFullscreen('globe')" title="Fullscreen">&#x26F6;</button>
+        <button class="globe-ctrl-btn" onclick="window.parallelInternet.resetGlobe()" title="Reset View">&#x21BA;</button>
+        <button class="globe-ctrl-btn active" onclick="window.parallelInternet.toggleRotation()" id="rotation-btn" title="Pause/Resume">&#x27F3;</button>
+      </div>
+      <div id="globe-canvas-container" class="globe-canvas">
+        <div class="globe-loading">
+          <div class="spinner"></div>
+          <p>Initializing globe...</p>
+        </div>
+      </div>
+      <div id="globe-tooltip"></div>
+      <div id="live-ticker" class="live-ticker"></div>
+
+      <!-- Embedded Chat Widget -->
+      <div id="pi-data-chat" class="pi-data-chat">
+        <div class="pi-chat-header">
+          <span>Ask about this data</span>
+          <select id="pi-chat-provider">
+            <option value="mock">Demo Mode</option>
+            <option value="deepseek">DeepSeek</option>
+            <option value="groq">Groq</option>
+          </select>
+        </div>
+        <div id="pi-chat-messages" class="pi-chat-messages"></div>
+        <div class="pi-chat-input">
+          <input type="text" id="pi-chat-input" placeholder="What's the fastest LLM?" />
+          <button id="pi-chat-send">Send</button>
+        </div>
+      </div>
+
+      <div id="provider-detail-panel"></div>
+    </div>
+
+    <!-- Right Panel - Providers List -->
+    <div class="providers-panel" id="data-section">
+      <div class="panel-header">
+        <span class="panel-title">LLM Providers <span class="provider-count" id="provider-count">(27)</span></span>
+        <button class="globe-ctrl-btn" onclick="window.parallelInternet.toggleFullscreen('data')" title="Fullscreen">&#x26F6;</button>
+      </div>
+
+      <!-- Filter Pills -->
+      <div class="filter-pills">
+        <button class="filter-pill active" data-filter="all" onclick="window.parallelInternet.setFilter('all')">All</button>
+        <button class="filter-pill" data-filter="frontier" onclick="window.parallelInternet.setFilter('frontier')">Frontier</button>
+        <button class="filter-pill" data-filter="inference" onclick="window.parallelInternet.setFilter('inference')">Fast Inference</button>
+        <button class="filter-pill" data-filter="opensource" onclick="window.parallelInternet.setFilter('opensource')">Open Source</button>
+        <button class="filter-pill" data-filter="cloud" onclick="window.parallelInternet.setFilter('cloud')">Cloud</button>
+      </div>
+
+      <!-- Quick Comparison -->
+      <div class="quick-comparison">
+        <div class="comparison-header">
+          <span class="comparison-title">Quick Compare</span>
+          <span class="comparison-hint">Click &#x2696; to compare</span>
+        </div>
+        <div class="comparison-slots" id="comparison-slots">
+          <div class="comparison-empty">Select providers to compare</div>
+        </div>
+      </div>
+
+      <!-- Provider Cards -->
+      <div id="providers-list"></div>
+
+      <!-- Performance Chart -->
+      <div class="performance-chart">
+        <div style="font-size: 12px; font-weight: 600; margin-bottom: 8px;">Speed Comparison (tok/s)</div>
+        <canvas id="performance-canvas" class="chart-canvas"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <script src="lib/three.min.js"></script>
+  <script src="../src/parallel-internet.js"></script>
+</body>
+</html>

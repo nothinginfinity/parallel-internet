@@ -1,0 +1,147 @@
+{
+  "business": {
+    "name": "Honey Cup Coffeehouse & Creamery",
+    "tagline": "Premium Coffee & Handmade Ice Cream",
+    "logo": null,
+    "primaryColor": "#d97706",
+    "secondaryColor": "#92400e",
+    "industry": "restaurant"
+  },
+  "locations": [
+    {
+      "id": "harbor-blvd",
+      "name": "Channel Islands Harbor",
+      "address": "3500 S. Harbor Blvd, Ste 1-105",
+      "city": "Oxnard",
+      "state": "CA",
+      "zip": "93035",
+      "country": "US",
+      "lat": 34.1594,
+      "lon": -119.2262,
+      "phone": "(805) 612-2250",
+      "color": "#d97706",
+      "status": "open",
+      "category": "flagship",
+      "hours": {
+        "mon": "7:00 AM - 3:00 PM",
+        "tue": "7:00 AM - 3:00 PM",
+        "wed": "7:00 AM - 3:00 PM",
+        "thu": "7:00 AM - 3:00 PM",
+        "fri": "7:00 AM - 3:00 PM",
+        "sat": "7:00 AM - 3:00 PM",
+        "sun": "7:00 AM - 3:00 PM"
+      },
+      "menu": [
+        { "name": "TBC Sandwich", "price": 9.95, "category": "food", "popular": true },
+        { "name": "Egg-Cellent Croissant", "price": 9.55, "category": "food", "popular": true },
+        { "name": "Breakfast Burrito", "price": 10.95, "category": "food", "popular": true },
+        { "name": "Acai Bowl", "price": 12.95, "category": "food", "popular": true },
+        { "name": "HoneyComb Latte", "price": 5.50, "category": "drinks", "popular": true },
+        { "name": "Honey Lavender Lemonade", "price": 5.95, "category": "drinks", "popular": true }
+      ],
+      "reviews": {
+        "yelp": { "rating": 4.5, "count": 516 },
+        "google": { "rating": 4.6, "count": 423 }
+      },
+      "social": {
+        "instagram": "honeycupcoffeehouse",
+        "facebook": "HoneyCupCoffeeHouseAndCreamery"
+      },
+      "links": {
+        "doordash": "https://www.doordash.com/store/honey-cup-coffeehouse-&-creamery-oxnard-33932041/",
+        "yelp": "https://www.yelp.com/biz/honey-cup-coffeehouse-and-creamery-oxnard",
+        "directions": "https://maps.google.com/?q=3500+S+Harbor+Blvd+Oxnard+CA"
+      },
+      "description": "Located in the beautiful Channel Islands Harbor with stunning waterfront views."
+    },
+    {
+      "id": "wagon-wheel",
+      "name": "Wagon Wheel",
+      "address": "2601 Wagon Wheel Rd, Ste 50",
+      "city": "Oxnard",
+      "state": "CA",
+      "zip": "93036",
+      "country": "US",
+      "lat": 34.2011,
+      "lon": -119.1775,
+      "phone": "(805) 642-4900",
+      "color": "#b45309",
+      "status": "open",
+      "category": "standard",
+      "hours": {
+        "mon": "7:00 AM - 3:00 PM",
+        "tue": "7:00 AM - 3:00 PM",
+        "wed": "7:00 AM - 3:00 PM",
+        "thu": "7:00 AM - 3:00 PM",
+        "fri": "7:00 AM - 3:00 PM",
+        "sat": "7:00 AM - 3:00 PM",
+        "sun": "7:00 AM - 3:00 PM"
+      },
+      "menu": [
+        { "name": "TBC Sandwich", "price": 9.95, "category": "food", "popular": true },
+        { "name": "Egg-Cellent Croissant", "price": 9.55, "category": "food", "popular": true },
+        { "name": "HoneyComb Latte", "price": 5.50, "category": "drinks", "popular": true }
+      ],
+      "reviews": {
+        "yelp": { "rating": 4.3, "count": 86 },
+        "google": { "rating": 4.4, "count": 156 }
+      },
+      "links": {
+        "yelp": "https://www.yelp.com/biz/honey-cup-coffeehouse-and-creamery-oxnard-2",
+        "directions": "https://maps.google.com/?q=2601+Wagon+Wheel+Rd+Oxnard+CA"
+      }
+    },
+    {
+      "id": "newbury-park",
+      "name": "Dos Vientos",
+      "address": "360 Via Las Brisas",
+      "city": "Newbury Park",
+      "state": "CA",
+      "zip": "91320",
+      "country": "US",
+      "lat": 34.1847,
+      "lon": -118.9103,
+      "phone": "(805) 716-3156",
+      "color": "#92400e",
+      "status": "open",
+      "category": "standard",
+      "hours": {
+        "mon": "7:30 AM - 3:30 PM",
+        "tue": "7:30 AM - 3:30 PM",
+        "wed": "7:30 AM - 3:30 PM",
+        "thu": "7:30 AM - 3:30 PM",
+        "fri": "7:30 AM - 3:30 PM",
+        "sat": "7:30 AM - 3:30 PM",
+        "sun": "7:00 AM - 2:00 PM"
+      },
+      "menu": [
+        { "name": "TBC Sandwich", "price": 9.95, "category": "food", "popular": true },
+        { "name": "Acai Bowl", "price": 12.95, "category": "food", "popular": true },
+        { "name": "Iced Blueberry Maple", "price": 6.50, "category": "drinks", "popular": true }
+      ],
+      "reviews": {
+        "yelp": { "rating": 4.4, "count": 122 },
+        "google": { "rating": 4.5, "count": 198 }
+      },
+      "links": {
+        "yelp": "https://www.yelp.com/biz/honey-cup-coffeehouse-and-creamery-newbury-park",
+        "directions": "https://maps.google.com/?q=360+Via+Las+Brisas+Newbury+Park+CA"
+      },
+      "description": "Featuring Executive Chef Alex Montoya's rotating weekend specials."
+    }
+  ],
+  "integrations": {
+    "yelp": "honey-cup-coffeehouse-and-creamery-oxnard",
+    "instagram": "honeycupcoffeehouse"
+  },
+  "vault": {
+    "enabled": true,
+    "allowedTypes": ["csv", "xlsx"],
+    "maxSize": "50MB"
+  },
+  "chat": {
+    "enabled": true,
+    "systemPrompt": "You are a helpful assistant for Honey Cup Coffeehouse & Creamery. Answer questions about locations, menu items, hours, and help with business analytics.",
+    "providers": ["groq", "deepseek", "gemini"]
+  }
+}

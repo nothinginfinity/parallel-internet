@@ -1,0 +1,100 @@
+{
+  "business": {
+    "name": "Sunset Realty",
+    "tagline": "Find Your Dream Home",
+    "logo": null,
+    "primaryColor": "#8b5cf6",
+    "secondaryColor": "#6d28d9",
+    "industry": "realestate"
+  },
+  "locations": [
+    {
+      "id": "beverly-hills-estate",
+      "name": "Beverly Hills Estate",
+      "lat": 34.0736,
+      "lon": -118.4004,
+      "address": "1234 Sunset Blvd",
+      "city": "Beverly Hills",
+      "state": "CA",
+      "zip": "90210",
+      "color": "#8b5cf6",
+      "status": "active",
+      "propertyType": "Single Family",
+      "price": 4500000,
+      "sqft": 5200,
+      "beds": 5,
+      "baths": 6,
+      "yearBuilt": 2018,
+      "daysOnMarket": 14,
+      "features": ["Pool", "Home Theater", "Wine Cellar", "Smart Home", "3-Car Garage"],
+      "agent": {
+        "name": "Sarah Johnson",
+        "phone": "(310) 555-1234",
+        "email": "sarah@sunsetrealty.com"
+      },
+      "links": {
+        "tour": "https://example.com/tour/beverly",
+        "directions": "https://maps.google.com/?q=1234+Sunset+Blvd+Beverly+Hills"
+      }
+    },
+    {
+      "id": "malibu-beachfront",
+      "name": "Malibu Beachfront",
+      "lat": 34.0259,
+      "lon": -118.7798,
+      "address": "5678 Pacific Coast Hwy",
+      "city": "Malibu",
+      "state": "CA",
+      "zip": "90265",
+      "color": "#a78bfa",
+      "status": "pending",
+      "propertyType": "Beach House",
+      "price": 8900000,
+      "sqft": 4100,
+      "beds": 4,
+      "baths": 5,
+      "yearBuilt": 2020,
+      "daysOnMarket": 7,
+      "features": ["Ocean View", "Private Beach Access", "Outdoor Kitchen", "Rooftop Deck"],
+      "agent": {
+        "name": "Michael Chen",
+        "phone": "(310) 555-5678"
+      },
+      "links": {
+        "directions": "https://maps.google.com/?q=5678+PCH+Malibu"
+      }
+    },
+    {
+      "id": "downtown-loft",
+      "name": "Downtown Arts District Loft",
+      "lat": 34.0407,
+      "lon": -118.2351,
+      "address": "900 Industrial Way",
+      "city": "Los Angeles",
+      "state": "CA",
+      "zip": "90013",
+      "color": "#6d28d9",
+      "status": "active",
+      "propertyType": "Loft",
+      "price": 950000,
+      "sqft": 1800,
+      "beds": 2,
+      "baths": 2,
+      "yearBuilt": 1925,
+      "daysOnMarket": 21,
+      "features": ["Exposed Brick", "High Ceilings", "Industrial Design", "Rooftop Access"],
+      "agent": {
+        "name": "Sarah Johnson",
+        "phone": "(310) 555-1234"
+      },
+      "links": {
+        "tour": "https://example.com/tour/dtla-loft"
+      }
+    }
+  ],
+  "ui": {
+    "showTicker": true,
+    "showSidebar": true,
+    "globeAutoRotate": true
+  }
+}

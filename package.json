@@ -1,0 +1,40 @@
+{
+  "name": "parallel-internet",
+  "version": "1.0.0",
+  "description": "3D globe dashboard for visualizing global data with AI-powered chat",
+  "main": "src/parallel-internet.js",
+  "bin": {
+    "pi-builder": "./cli/index.js"
+  },
+  "scripts": {
+    "dev": "npx serve public -p 3000",
+    "build": "echo 'No build step needed - vanilla JS'",
+    "new": "node cli/index.js new",
+    "preview": "node cli/index.js preview",
+    "templates": "node cli/index.js templates"
+  },
+  "keywords": [
+    "3d-globe",
+    "dashboard",
+    "visualization",
+    "threejs",
+    "llm",
+    "ai-providers",
+    "business-intelligence"
+  ],
+  "author": "nothinginfinity",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nothinginfinity/parallel-internet.git"
+  },
+  "files": [
+    "src/",
+    "cli/",
+    "templates/",
+    "public/"
+  ],
+  "devDependencies": {
+    "serve": "^14.2.0"
+  }
+}

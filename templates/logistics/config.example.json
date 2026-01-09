@@ -1,0 +1,96 @@
+{
+  "business": {
+    "name": "SwiftShip Logistics",
+    "tagline": "Fast, Reliable Delivery",
+    "logo": null,
+    "primaryColor": "#f59e0b",
+    "secondaryColor": "#d97706",
+    "industry": "logistics"
+  },
+  "locations": [
+    {
+      "id": "hub-la",
+      "name": "Los Angeles Hub",
+      "lat": 33.9425,
+      "lon": -118.4081,
+      "address": "1000 Airport Way",
+      "city": "Los Angeles",
+      "state": "CA",
+      "zip": "90045",
+      "phone": "(310) 555-SHIP",
+      "color": "#f59e0b",
+      "status": "active",
+      "depotType": "Distribution Hub",
+      "vehicles": 150,
+      "inTransit": 85,
+      "maintenance": 12,
+      "available": 53,
+      "utilization": 78,
+      "onTimeRate": 96,
+      "dailyDeliveries": 4500,
+      "capacity": 50000,
+      "routes": ["I-405 North", "I-10 East", "I-110 South", "Pacific Coast"],
+      "links": {
+        "tracking": "https://example.com/track",
+        "directions": "https://maps.google.com/?q=1000+Airport+Way+LA"
+      }
+    },
+    {
+      "id": "depot-oc",
+      "name": "Orange County Depot",
+      "lat": 33.6846,
+      "lon": -117.8265,
+      "address": "500 Industrial Pkwy",
+      "city": "Irvine",
+      "state": "CA",
+      "zip": "92614",
+      "phone": "(949) 555-FAST",
+      "color": "#d97706",
+      "status": "active",
+      "depotType": "Regional Depot",
+      "vehicles": 75,
+      "inTransit": 48,
+      "maintenance": 5,
+      "available": 22,
+      "utilization": 85,
+      "onTimeRate": 94,
+      "dailyDeliveries": 2200,
+      "capacity": 25000,
+      "routes": ["I-5 South", "SR-55 North", "I-405 South"],
+      "links": {
+        "tracking": "https://example.com/track"
+      }
+    },
+    {
+      "id": "depot-ie",
+      "name": "Inland Empire Depot",
+      "lat": 34.0633,
+      "lon": -117.6509,
+      "address": "2000 Logistics Dr",
+      "city": "Ontario",
+      "state": "CA",
+      "zip": "91761",
+      "phone": "(909) 555-MOVE",
+      "color": "#fbbf24",
+      "status": "active",
+      "depotType": "Fulfillment Center",
+      "vehicles": 200,
+      "inTransit": 120,
+      "maintenance": 18,
+      "available": 62,
+      "utilization": 91,
+      "onTimeRate": 92,
+      "dailyDeliveries": 8500,
+      "capacity": 100000,
+      "routes": ["I-10 West", "I-15 North", "SR-60 East"],
+      "links": {
+        "tracking": "https://example.com/track"
+      }
+    }
+  ],
+  "ui": {
+    "showTicker": true,
+    "showSidebar": true,
+    "globeAutoRotate": true
+  }
+}

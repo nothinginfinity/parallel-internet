@@ -1,0 +1,48 @@
+/* Parallel Internet - Real Estate Template Styles */
+
+:root {
+  --pi-primary: #8b5cf6;
+  --pi-secondary: #6d28d9;
+  --pi-accent: #a78bfa;
+  --pi-warning: #f59e0b;
+  --pi-danger: #ef4444;
+}
+
+.pi-globe-container {
+  background: linear-gradient(135deg, #0a0a12 0%, #1a1028 50%, #0a0a12 100%);
+}
+
+.pi-globe-title {
+  color: #8b5cf6;
+  text-shadow: 0 0 30px rgba(139, 92, 246, 0.5);
+}
+
+.pi-card {
+  border-left: 3px solid #8b5cf6;
+}
+
+.pi-card:hover {
+  border-left-color: #a78bfa;
+}
+
+.pi-card.active {
+  background: rgba(139, 92, 246, 0.1);
+  border-left-color: #a78bfa;
+}
+
+.pi-ticker-value.primary {
+  color: #8b5cf6;
+}
+
+.pi-filter-pill.active {
+  background: #8b5cf6;
+  border-color: #8b5cf6;
+}
+
+.pi-card-list::-webkit-scrollbar-thumb {
+  background: #8b5cf6;
+}
+
+.pi-detail-panel {
+  border-left: 3px solid #8b5cf6;
+}

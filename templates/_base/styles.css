@@ -1,0 +1,353 @@
+/* Parallel Internet - Base Styles */
+/* Override with template-specific CSS */
+
+/* ============================================
+   CSS VARIABLES (Template can override)
+   ============================================ */
+
+:root {
+  --pi-primary: #3b82f6;
+  --pi-secondary: #1e40af;
+  --pi-accent: #22c55e;
+  --pi-warning: #f59e0b;
+  --pi-danger: #ef4444;
+
+  --pi-bg-primary: #0a0a0f;
+  --pi-bg-secondary: #1a1a2e;
+  --pi-bg-card: rgba(255, 255, 255, 0.05);
+
+  --pi-text-primary: #ffffff;
+  --pi-text-secondary: rgba(255, 255, 255, 0.7);
+  --pi-text-muted: rgba(255, 255, 255, 0.5);
+
+  --pi-border: rgba(255, 255, 255, 0.1);
+  --pi-border-hover: rgba(255, 255, 255, 0.2);
+
+  --pi-radius-sm: 6px;
+  --pi-radius-md: 8px;
+  --pi-radius-lg: 12px;
+
+  --pi-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* ============================================
+   MAIN CONTAINER
+   ============================================ */
+
+.pi-container {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  grid-template-rows: auto 1fr;
+  height: calc(100vh - 60px);
+  gap: 16px;
+  padding: 16px;
+  background: var(--pi-bg-primary);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: var(--pi-text-primary);
+}
+
+/* ============================================
+   GLOBE CONTAINER
+   ============================================ */
+
+.pi-globe-container {
+  grid-row: span 2;
+  background: linear-gradient(135deg, var(--pi-bg-primary) 0%, var(--pi-bg-secondary) 50%, var(--pi-bg-primary) 100%);
+  border-radius: var(--pi-radius-lg);
+  border: 1px solid var(--pi-border);
+  position: relative;
+  overflow: hidden;
+  min-height: 500px;
+}
+
+.pi-globe-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Globe Overlay */
+.pi-globe-overlay {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 10;
+}
+
+.pi-globe-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--pi-text-primary);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  margin: 0;
+}
+
+.pi-globe-subtitle {
+  font-size: 13px;
+  color: var(--pi-text-muted);
+  margin-top: 4px;
+}
+
+/* ============================================
+   LIVE TICKER
+   ============================================ */
+
+.pi-ticker {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  right: 16px;
+  display: flex;
+  gap: 24px;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
+  padding: 12px 20px;
+  border-radius: var(--pi-radius-md);
+  border: 1px solid var(--pi-border);
+}
+
+.pi-ticker-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pi-ticker-label {
+  font-size: 10px;
+  color: var(--pi-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.pi-ticker-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--pi-accent);
+  font-family: 'SF Mono', 'Monaco', monospace;
+}
+
+.pi-ticker-value.warning {
+  color: var(--pi-warning);
+}
+
+.pi-ticker-value.primary {
+  color: var(--pi-primary);
+}
+
+/* ============================================
+   SIDEBAR / CARD LIST
+   ============================================ */
+
+.pi-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.pi-sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--pi-border);
+}
+
+.pi-sidebar-title {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* Filter Pills */
+.pi-filters {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.pi-filter-pill {
+  padding: 6px 12px;
+  background: var(--pi-bg-card);
+  border: 1px solid var(--pi-border);
+  border-radius: 20px;
+  color: var(--pi-text-secondary);
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.pi-filter-pill:hover {
+  border-color: var(--pi-border-hover);
+  color: var(--pi-text-primary);
+}
+
+.pi-filter-pill.active {
+  background: var(--pi-primary);
+  border-color: var(--pi-primary);
+  color: white;
+}
+
+/* Cards */
+.pi-card {
+  background: var(--pi-bg-card);
+  border: 1px solid var(--pi-border);
+  border-radius: var(--pi-radius-md);
+  padding: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.pi-card:hover {
+  border-color: var(--pi-border-hover);
+  transform: translateY(-2px);
+}
+
+.pi-card.selected {
+  border-color: var(--pi-primary);
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.card-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--pi-radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.card-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.card-title {
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-subtitle {
+  font-size: 10px;
+  color: var(--pi-text-muted);
+}
+
+.card-status {
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+.card-status.active,
+.card-status.open,
+.card-status.online {
+  background: rgba(34, 197, 94, 0.2);
+  color: var(--pi-accent);
+}
+
+.card-status.inactive,
+.card-status.closed,
+.card-status.offline {
+  background: rgba(239, 68, 68, 0.2);
+  color: var(--pi-danger);
+}
+
+.card-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.stat {
+  text-align: center;
+}
+
+.stat-label {
+  font-size: 9px;
+  color: var(--pi-text-muted);
+  text-transform: uppercase;
+}
+
+.stat-value {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* ============================================
+   MARKERS (CSS fallback)
+   ============================================ */
+
+.pi-marker {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--pi-primary);
+  box-shadow: 0 0 20px var(--pi-primary);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  animation: pi-pulse 2s ease-in-out infinite;
+}
+
+.pi-marker:hover {
+  transform: scale(1.5);
+}
+
+@keyframes pi-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.15); }
+}
+
+/* ============================================
+   SCROLLBAR
+   ============================================ */
+
+.pi-sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.pi-sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.pi-sidebar::-webkit-scrollbar-thumb {
+  background: var(--pi-border);
+  border-radius: 3px;
+}
+
+.pi-sidebar::-webkit-scrollbar-thumb:hover {
+  background: var(--pi-border-hover);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 900px) {
+  .pi-container {
+    grid-template-columns: 1fr;
+    grid-template-rows: 400px auto;
+  }
+
+  .pi-globe-container {
+    grid-row: 1;
+  }
+
+  .pi-sidebar {
+    max-height: 50vh;
+  }
+}

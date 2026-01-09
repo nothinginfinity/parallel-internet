@@ -1,0 +1,28 @@
+{
+  "name": "pi-builder",
+  "version": "1.0.0",
+  "description": "Parallel Internet Site Builder - Generate customized 3D globe dashboards from templates",
+  "main": "bin/pi-builder.js",
+  "bin": {
+    "pi-builder": "./bin/pi-builder.js"
+  },
+  "scripts": {
+    "start": "node bin/pi-builder.js",
+    "link": "npm link"
+  },
+  "keywords": [
+    "parallel-internet",
+    "dashboard",
+    "globe",
+    "three.js",
+    "template"
+  ],
+  "author": "PI Builder",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "commander": "^11.1.0",
+    "fs-extra": "^11.2.0",
+    "http-server": "^14.1.1"
+  }
+}

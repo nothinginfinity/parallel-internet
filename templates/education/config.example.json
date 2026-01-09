@@ -1,0 +1,100 @@
+{
+  "business": {
+    "name": "Pacific University System",
+    "tagline": "Shaping Tomorrow's Leaders",
+    "logo": null,
+    "primaryColor": "#06b6d4",
+    "secondaryColor": "#0891b2",
+    "industry": "education"
+  },
+  "locations": [
+    {
+      "id": "main-campus",
+      "name": "Pacific University - Main Campus",
+      "lat": 34.0689,
+      "lon": -118.4452,
+      "address": "1000 University Ave",
+      "city": "Los Angeles",
+      "state": "CA",
+      "zip": "90024",
+      "phone": "(310) 555-UNIV",
+      "color": "#06b6d4",
+      "status": "active",
+      "campusType": "University",
+      "enrollment": 45000,
+      "graduationRate": 92,
+      "acceptanceRate": 12,
+      "studentFacultyRatio": 18,
+      "ranking": 15,
+      "programs": ["Computer Science", "Engineering", "Medicine", "Business", "Law", "Film", "Psychology", "Biology"],
+      "tuition": {
+        "inState": 14500,
+        "outOfState": 44500
+      },
+      "links": {
+        "apply": "https://example.com/apply",
+        "tour": "https://example.com/tour",
+        "directions": "https://maps.google.com/?q=1000+University+Ave+LA"
+      }
+    },
+    {
+      "id": "tech-campus",
+      "name": "Pacific Tech Institute",
+      "lat": 34.1378,
+      "lon": -118.1253,
+      "address": "500 Technology Dr",
+      "city": "Pasadena",
+      "state": "CA",
+      "zip": "91125",
+      "phone": "(626) 555-TECH",
+      "color": "#0891b2",
+      "status": "active",
+      "campusType": "Technical Institute",
+      "enrollment": 2500,
+      "graduationRate": 95,
+      "acceptanceRate": 8,
+      "studentFacultyRatio": 8,
+      "ranking": 3,
+      "programs": ["Aerospace", "Physics", "Mathematics", "Computer Science", "Robotics"],
+      "tuition": {
+        "inState": 58000,
+        "outOfState": 58000
+      },
+      "links": {
+        "apply": "https://example.com/apply-tech"
+      }
+    },
+    {
+      "id": "community-college",
+      "name": "Santa Monica Community College",
+      "lat": 34.0195,
+      "lon": -118.4912,
+      "address": "1900 Pico Blvd",
+      "city": "Santa Monica",
+      "state": "CA",
+      "zip": "90405",
+      "phone": "(310) 555-SMCC",
+      "color": "#22d3ee",
+      "status": "active",
+      "campusType": "Community College",
+      "enrollment": 30000,
+      "graduationRate": 45,
+      "acceptanceRate": 100,
+      "studentFacultyRatio": 25,
+      "programs": ["Liberal Arts", "Nursing", "Business", "IT", "Culinary Arts"],
+      "tuition": {
+        "inState": 1500,
+        "outOfState": 8500
+      },
+      "links": {
+        "apply": "https://example.com/apply-smcc",
+        "tour": "https://example.com/tour-smcc"
+      }
+    }
+  ],
+  "ui": {
+    "showTicker": true,
+    "showSidebar": true,
+    "globeAutoRotate": true
+  }
+}

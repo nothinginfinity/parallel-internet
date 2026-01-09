@@ -1,0 +1,48 @@
+/* Parallel Internet - Education Template Styles */
+
+:root {
+  --pi-primary: #06b6d4;
+  --pi-secondary: #0891b2;
+  --pi-accent: #22d3ee;
+  --pi-warning: #f59e0b;
+  --pi-success: #22c55e;
+}
+
+.pi-globe-container {
+  background: linear-gradient(135deg, #0a0f0f 0%, #0f1f20 50%, #0a0f0f 100%);
+}
+
+.pi-globe-title {
+  color: #06b6d4;
+  text-shadow: 0 0 30px rgba(6, 182, 212, 0.5);
+}
+
+.pi-card {
+  border-left: 3px solid #06b6d4;
+}
+
+.pi-card:hover {
+  border-left-color: #22d3ee;
+}
+
+.pi-card.active {
+  background: rgba(6, 182, 212, 0.1);
+  border-left-color: #22d3ee;
+}
+
+.pi-ticker-value.primary {
+  color: #06b6d4;
+}
+
+.pi-filter-pill.active {
+  background: #06b6d4;
+  border-color: #06b6d4;
+}
+
+.pi-card-list::-webkit-scrollbar-thumb {
+  background: #06b6d4;
+}
+
+.pi-detail-panel {
+  border-left: 3px solid #06b6d4;
+}

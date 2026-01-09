@@ -1,0 +1,52 @@
+/* Parallel Internet - Logistics Template Styles */
+
+:root {
+  --pi-primary: #f59e0b;
+  --pi-secondary: #d97706;
+  --pi-accent: #fbbf24;
+  --pi-warning: #ef4444;
+  --pi-success: #22c55e;
+}
+
+.pi-globe-container {
+  background: linear-gradient(135deg, #0f0d0a 0%, #1f1a14 50%, #0f0d0a 100%);
+}
+
+.pi-globe-title {
+  color: #f59e0b;
+  text-shadow: 0 0 30px rgba(245, 158, 11, 0.5);
+}
+
+.pi-card {
+  border-left: 3px solid #f59e0b;
+}
+
+.pi-card:hover {
+  border-left-color: #fbbf24;
+}
+
+.pi-card.active {
+  background: rgba(245, 158, 11, 0.1);
+  border-left-color: #fbbf24;
+}
+
+.pi-ticker-value.primary {
+  color: #f59e0b;
+}
+
+.pi-ticker-value.warning {
+  color: #ef4444;
+}
+
+.pi-filter-pill.active {
+  background: #f59e0b;
+  border-color: #f59e0b;
+}
+
+.pi-card-list::-webkit-scrollbar-thumb {
+  background: #f59e0b;
+}
+
+.pi-detail-panel {
+  border-left: 3px solid #f59e0b;
+}

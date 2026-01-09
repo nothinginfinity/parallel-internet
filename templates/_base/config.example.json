@@ -1,0 +1,72 @@
+{
+  "business": {
+    "name": "My Business",
+    "tagline": "Your tagline here",
+    "logo": null,
+    "primaryColor": "#3b82f6",
+    "secondaryColor": "#1e40af",
+    "industry": "generic"
+  },
+  "locations": [
+    {
+      "id": "location-1",
+      "name": "Main Location",
+      "address": "123 Main Street",
+      "city": "San Francisco",
+      "state": "CA",
+      "zip": "94102",
+      "country": "US",
+      "lat": 37.7749,
+      "lon": -122.4194,
+      "phone": "(555) 123-4567",
+      "status": "open",
+      "category": "flagship",
+      "hours": {
+        "mon": "9:00 AM - 5:00 PM",
+        "tue": "9:00 AM - 5:00 PM",
+        "wed": "9:00 AM - 5:00 PM",
+        "thu": "9:00 AM - 5:00 PM",
+        "fri": "9:00 AM - 5:00 PM",
+        "sat": "10:00 AM - 4:00 PM",
+        "sun": "Closed"
+      }
+    },
+    {
+      "id": "location-2",
+      "name": "Downtown Branch",
+      "address": "456 Market Street",
+      "city": "San Francisco",
+      "state": "CA",
+      "zip": "94103",
+      "country": "US",
+      "lat": 37.7897,
+      "lon": -122.4001,
+      "phone": "(555) 234-5678",
+      "status": "open",
+      "category": "standard"
+    }
+  ],
+  "custom": {},
+  "integrations": {
+    "googleAnalytics": null,
+    "yelp": null,
+    "google": null
+  },
+  "vault": {
+    "enabled": false,
+    "allowedTypes": ["csv", "xlsx", "pdf"],
+    "maxSize": "50MB"
+  },
+  "chat": {
+    "enabled": false,
+    "systemPrompt": "",
+    "providers": ["groq", "deepseek"]
+  },
+  "ui": {
+    "showTicker": true,
+    "showSidebar": true,
+    "showChat": false,
+    "showVault": false,
+    "globeAutoRotate": true
+  }
+}

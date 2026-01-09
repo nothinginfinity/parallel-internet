@@ -1,0 +1,48 @@
+/* Parallel Internet - Events Template Styles */
+
+:root {
+  --pi-primary: #ec4899;
+  --pi-secondary: #be185d;
+  --pi-accent: #f472b6;
+  --pi-warning: #f59e0b;
+  --pi-success: #22c55e;
+}
+
+.pi-globe-container {
+  background: linear-gradient(135deg, #0f0a0d 0%, #1f1420 50%, #0f0a0d 100%);
+}
+
+.pi-globe-title {
+  color: #ec4899;
+  text-shadow: 0 0 30px rgba(236, 72, 153, 0.5);
+}
+
+.pi-card {
+  border-left: 3px solid #ec4899;
+}
+
+.pi-card:hover {
+  border-left-color: #f472b6;
+}
+
+.pi-card.active {
+  background: rgba(236, 72, 153, 0.1);
+  border-left-color: #f472b6;
+}
+
+.pi-ticker-value.primary {
+  color: #ec4899;
+}
+
+.pi-filter-pill.active {
+  background: #ec4899;
+  border-color: #ec4899;
+}
+
+.pi-card-list::-webkit-scrollbar-thumb {
+  background: #ec4899;
+}
+
+.pi-detail-panel {
+  border-left: 3px solid #ec4899;
+}

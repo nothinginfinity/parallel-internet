@@ -1,0 +1,114 @@
+{
+  "business": {
+    "name": "Metro Mart",
+    "tagline": "Your Neighborhood Shopping Destination",
+    "logo": null,
+    "primaryColor": "#10b981",
+    "secondaryColor": "#047857",
+    "industry": "retail"
+  },
+  "locations": [
+    {
+      "id": "downtown-main",
+      "name": "Downtown Flagship",
+      "lat": 34.0522,
+      "lon": -118.2437,
+      "address": "123 Main Street",
+      "city": "Los Angeles",
+      "state": "CA",
+      "zip": "90012",
+      "phone": "(213) 555-0100",
+      "color": "#10b981",
+      "status": "open",
+      "category": "flagship",
+      "storeType": "Flagship",
+      "hours": {
+        "mon": "8:00 AM - 10:00 PM",
+        "tue": "8:00 AM - 10:00 PM",
+        "wed": "8:00 AM - 10:00 PM",
+        "thu": "8:00 AM - 10:00 PM",
+        "fri": "8:00 AM - 11:00 PM",
+        "sat": "9:00 AM - 11:00 PM",
+        "sun": "10:00 AM - 8:00 PM"
+      },
+      "inventory": {
+        "inStock": 5420,
+        "lowStock": 12
+      },
+      "categories": ["Electronics", "Home & Garden", "Clothing", "Groceries"],
+      "links": {
+        "directions": "https://maps.google.com/?q=123+Main+Street+Los+Angeles",
+        "website": "https://example.com/downtown"
+      }
+    },
+    {
+      "id": "westside-plaza",
+      "name": "Westside Plaza",
+      "lat": 34.0195,
+      "lon": -118.4912,
+      "address": "456 Ocean Ave",
+      "city": "Santa Monica",
+      "state": "CA",
+      "zip": "90401",
+      "phone": "(310) 555-0200",
+      "color": "#047857",
+      "status": "open",
+      "category": "standard",
+      "storeType": "Standard",
+      "hours": {
+        "mon": "9:00 AM - 9:00 PM",
+        "tue": "9:00 AM - 9:00 PM",
+        "wed": "9:00 AM - 9:00 PM",
+        "thu": "9:00 AM - 9:00 PM",
+        "fri": "9:00 AM - 10:00 PM",
+        "sat": "9:00 AM - 10:00 PM",
+        "sun": "10:00 AM - 7:00 PM"
+      },
+      "inventory": {
+        "inStock": 3210,
+        "lowStock": 8
+      },
+      "categories": ["Electronics", "Home & Garden", "Clothing"],
+      "links": {
+        "directions": "https://maps.google.com/?q=456+Ocean+Ave+Santa+Monica"
+      }
+    },
+    {
+      "id": "valley-express",
+      "name": "Valley Express",
+      "lat": 34.1478,
+      "lon": -118.1445,
+      "address": "789 Valley Blvd",
+      "city": "Pasadena",
+      "state": "CA",
+      "zip": "91101",
+      "phone": "(626) 555-0300",
+      "color": "#34d399",
+      "status": "open",
+      "category": "express",
+      "storeType": "Express",
+      "hours": {
+        "mon": "7:00 AM - 11:00 PM",
+        "tue": "7:00 AM - 11:00 PM",
+        "wed": "7:00 AM - 11:00 PM",
+        "thu": "7:00 AM - 11:00 PM",
+        "fri": "7:00 AM - 12:00 AM",
+        "sat": "7:00 AM - 12:00 AM",
+        "sun": "8:00 AM - 10:00 PM"
+      },
+      "inventory": {
+        "inStock": 1850,
+        "lowStock": 25
+      },
+      "categories": ["Groceries", "Convenience"],
+      "links": {
+        "directions": "https://maps.google.com/?q=789+Valley+Blvd+Pasadena"
+      }
+    }
+  ],
+  "ui": {
+    "showTicker": true,
+    "showSidebar": true,
+    "globeAutoRotate": true
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "business": {
+    "name": "StageLive Entertainment",
+    "tagline": "Unforgettable Live Experiences",
+    "logo": null,
+    "primaryColor": "#ec4899",
+    "secondaryColor": "#be185d",
+    "industry": "events"
+  },
+  "locations": [
+    {
+      "id": "arena-dtla",
+      "name": "Downtown Arena",
+      "lat": 34.0430,
+      "lon": -118.2673,
+      "address": "1000 S Figueroa St",
+      "city": "Los Angeles",
+      "state": "CA",
+      "zip": "90015",
+      "phone": "(213) 555-SHOW",
+      "color": "#ec4899",
+      "status": "active",
+      "venueType": "Arena",
+      "capacity": 20000,
+      "nextEvent": {
+        "name": "Summer Music Festival",
+        "date": "2026-07-15",
+        "ticketsAvailable": 5420,
+        "price": 89
+      },
+      "amenities": ["VIP Suites", "Premium Bars", "Parking", "Accessible Seating", "Food Court"],
+      "links": {
+        "tickets": "https://example.com/tickets",
+        "seating": "https://example.com/seating",
+        "directions": "https://maps.google.com/?q=1000+S+Figueroa+LA"
+      }
+    },
+    {
+      "id": "amphitheater-hollywood",
+      "name": "Hollywood Bowl",
+      "lat": 34.1122,
+      "lon": -118.3391,
+      "address": "2301 N Highland Ave",
+      "city": "Los Angeles",
+      "state": "CA",
+      "zip": "90068",
+      "phone": "(323) 555-BOWL",
+      "color": "#f472b6",
+      "status": "active",
+      "venueType": "Amphitheater",
+      "capacity": 17500,
+      "nextEvent": {
+        "name": "LA Philharmonic",
+        "date": "2026-08-22",
+        "ticketsAvailable": 2100,
+        "price": 45
+      },
+      "amenities": ["Picnic Areas", "Wine Bar", "Shuttle Service", "Box Seats"],
+      "links": {
+        "tickets": "https://example.com/tickets"
+      }
+    },
+    {
+      "id": "theater-pasadena",
+      "name": "Rose Theater",
+      "lat": 34.1478,
+      "lon": -118.1445,
+      "address": "300 E Green St",
+      "city": "Pasadena",
+      "state": "CA",
+      "zip": "91101",
+      "phone": "(626) 555-ROSE",
+      "color": "#be185d",
+      "status": "active",
+      "venueType": "Theater",
+      "capacity": 3000,
+      "nextEvent": {
+        "name": "Broadway Musical",
+        "date": "2026-02-10",
+        "ticketsAvailable": 850,
+        "price": 75
+      },
+      "amenities": ["Orchestra Pit", "Balcony Seating", "Coat Check", "Champagne Bar"],
+      "links": {
+        "tickets": "https://example.com/tickets"
+      }
+    }
+  ],
+  "ui": {
+    "showTicker": true,
+    "showSidebar": true,
+    "globeAutoRotate": true
+  }
+}
