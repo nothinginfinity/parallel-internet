@@ -14,7 +14,7 @@
   let isDragging = false;
   let previousMousePosition = { x: 0, y: 0 };
   let globeRotation = { x: 0, y: 0 };
-  let autoRotate = true;
+  let autoRotate = false; // Disabled by default - user can enable with button
   let connectionLine = null;
   let glowMeshes = [];
   let comparedProviders = [];
@@ -1247,22 +1247,35 @@
     const trendIcon = provider.trend === 'up' ? '↑' : provider.trend === 'down' ? '↓' : '→';
     const trendColor = provider.trend === 'up' ? '#22c55e' : provider.trend === 'down' ? '#ef4444' : '#f59e0b';
     const statusColor = provider.status === 'online' ? '#22c55e' : '#ef4444';
-    const contextPercent = (provider.contextWindow.actual / provider.contextWindow.reported) * 100;
+    const contextPercent = provider.contextWindow.reported > 0 ? (provider.contextWindow.actual / provider.contextWindow.reported) * 100 : 0;
 
     panel.innerHTML = `
-      <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 16px;">
-        <div style="display: flex; align-items: center; gap: 12px;">
-          <div style="width: 48px; height: 48px; border-radius: 12px; background: ${provider.color}20;
-                      color: ${provider.color}; display: flex; align-items: center; justify-content: center;
-                      font-size: 20px; font-weight: bold; border: 2px solid ${provider.color}40;">${provider.logo}</div>
-          <div>
-            <div style="font-size: 18px; font-weight: 700;">${provider.name}</div>
-            <div style="font-size: 11px; color: rgba(255,255,255,0.5);">Founded ${provider.founded} • ${provider.hq}</div>
-          </div>
-        </div>
+      <!-- Drag Handle -->
+      <div class="panel-drag-handle" onmousedown="window.parallelInternet.startDragPanel(event)">
         <button onclick="window.parallelInternet.closeDetail()"
-                style="background: none; border: none; color: rgba(255,255,255,0.5); cursor: pointer; font-size: 20px; padding: 0;">×</button>
+                style="background: none; border: none; color: rgba(255,255,255,0.5); cursor: pointer; font-size: 20px; padding: 0; margin-left: auto;">×</button>
       </div>
+
+      <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+        <div style="width: 48px; height: 48px; border-radius: 12px; background: ${provider.color}20;
+                    color: ${provider.color}; display: flex; align-items: center; justify-content: center;
+                    font-size: 20px; font-weight: bold; border: 2px solid ${provider.color}40;">${provider.logo}</div>
+        <div>
+          <div style="font-size: 18px; font-weight: 700;">${provider.name}</div>
+          <div style="font-size: 11px; color: rgba(255,255,255,0.5);">Founded ${provider.founded} • ${provider.hq}</div>
+        </div>
+      </div>
+
+      <!-- Social Media Links -->
+      ${provider.social ? `
+      <div class="social-links">
+        ${provider.social.x ? `<a href="${provider.social.x}" target="_blank" class="social-link x" title="X (Twitter)">𝕏</a>` : ''}
+        ${provider.social.linkedin ? `<a href="${provider.social.linkedin}" target="_blank" class="social-link linkedin" title="LinkedIn">in</a>` : ''}
+        ${provider.social.github ? `<a href="${provider.social.github}" target="_blank" class="social-link github" title="GitHub">⌘</a>` : ''}
+        ${provider.social.youtube ? `<a href="${provider.social.youtube}" target="_blank" class="social-link youtube" title="YouTube">▶</a>` : ''}
+        ${provider.social.discord ? `<a href="${provider.social.discord}" target="_blank" class="social-link discord" title="Discord">💬</a>` : ''}
+      </div>
+      ` : ''}
 
       <!-- Status & Category -->
       <div style="display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;">
@@ -1272,6 +1285,7 @@
       </div>
 
       <!-- Models -->
+      ${provider.models && provider.models.length > 0 ? `
       <div style="font-size: 11px; color: rgba(255,255,255,0.6); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">Models</div>
       <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px;">
         ${provider.models.slice(0, 5).map(model => `
@@ -1279,6 +1293,7 @@
         `).join('')}
         ${provider.models.length > 5 ? `<span style="padding: 4px 8px; font-size: 10px; color: rgba(255,255,255,0.4);">+${provider.models.length - 5} more</span>` : ''}
       </div>
+      ` : ''}
 
       <!-- Pricing Grid -->
       <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 16px;">
@@ -1375,9 +1390,162 @@
       </div>
 
       ${renderRelationshipsPanel(provider) || ''}
+
+      <!-- Live Feed Section -->
+      <div class="live-feed-section">
+        <div class="live-feed-header">
+          <div class="live-feed-title">
+            <span class="live-dot"></span>
+            Live Feed
+          </div>
+          <div class="feed-tabs">
+            <button class="feed-tab active" data-feed="all">All</button>
+            <button class="feed-tab" data-feed="hn">HN</button>
+            <button class="feed-tab" data-feed="x">X</button>
+            <button class="feed-tab" data-feed="arxiv">arXiv</button>
+          </div>
+        </div>
+        <div class="feed-items" id="feed-items-${provider.id}">
+          <div class="feed-loading">Loading feed...</div>
+        </div>
+      </div>
     `;
 
     panel.style.display = 'block';
+
+    // Initialize draggable
+    initDraggablePanel(panel);
+
+    // Load live feed
+    loadLiveFeed(provider);
+  }
+
+  // ============================================
+  // DRAGGABLE PANEL
+  // ============================================
+
+  let panelDragState = { isDragging: false, startX: 0, startY: 0, startLeft: 0, startTop: 0 };
+
+  function initDraggablePanel(panel) {
+    // Reset position to default
+    panel.style.position = 'absolute';
+    panel.style.right = '16px';
+    panel.style.top = '16px';
+    panel.style.left = 'auto';
+  }
+
+  function startDragPanel(event) {
+    const panel = document.getElementById('provider-detail-panel');
+    if (!panel) return;
+
+    panelDragState.isDragging = true;
+    panelDragState.startX = event.clientX;
+    panelDragState.startY = event.clientY;
+
+    const rect = panel.getBoundingClientRect();
+    panelDragState.startLeft = rect.left;
+    panelDragState.startTop = rect.top;
+
+    panel.classList.add('dragging');
+    panel.style.right = 'auto';
+    panel.style.left = rect.left + 'px';
+    panel.style.top = rect.top + 'px';
+
+    document.addEventListener('mousemove', dragPanel);
+    document.addEventListener('mouseup', stopDragPanel);
+  }
+
+  function dragPanel(event) {
+    if (!panelDragState.isDragging) return;
+
+    const panel = document.getElementById('provider-detail-panel');
+    if (!panel) return;
+
+    const deltaX = event.clientX - panelDragState.startX;
+    const deltaY = event.clientY - panelDragState.startY;
+
+    panel.style.left = (panelDragState.startLeft + deltaX) + 'px';
+    panel.style.top = (panelDragState.startTop + deltaY) + 'px';
+  }
+
+  function stopDragPanel() {
+    panelDragState.isDragging = false;
+    const panel = document.getElementById('provider-detail-panel');
+    if (panel) {
+      panel.classList.remove('dragging');
+    }
+    document.removeEventListener('mousemove', dragPanel);
+    document.removeEventListener('mouseup', stopDragPanel);
+  }
+
+  // ============================================
+  // LIVE FEED
+  // ============================================
+
+  async function loadLiveFeed(provider) {
+    const container = document.getElementById(`feed-items-${provider.id}`);
+    if (!container) return;
+
+    // Search terms for the company
+    const searchTerms = [provider.name, provider.id].filter(Boolean);
+
+    // Generate mock feed data (in production, these would be real API calls)
+    const feedItems = await fetchFeedData(searchTerms, provider);
+
+    if (feedItems.length === 0) {
+      container.innerHTML = '<div class="feed-loading">No recent news found</div>';
+      return;
+    }
+
+    container.innerHTML = feedItems.map(item => `
+      <div class="feed-item" onclick="window.open('${item.url}', '_blank')">
+        <div class="feed-item-header">
+          <span class="feed-source ${item.source}">${item.source.toUpperCase()}</span>
+          <span class="feed-time">${item.time}</span>
+        </div>
+        <div class="feed-item-title">${item.title}</div>
+        ${item.meta ? `<div class="feed-item-meta">${item.meta}</div>` : ''}
+      </div>
+    `).join('');
+  }
+
+  async function fetchFeedData(searchTerms, provider) {
+    // Mock data - in production this would call real APIs
+    const mockFeeds = {
+      'anthropic': [
+        { source: 'hn', title: 'Claude 3.5 Sonnet achieves new SOTA on SWE-bench', time: '2h ago', url: 'https://news.ycombinator.com', meta: '234 points • 89 comments' },
+        { source: 'x', title: '@AnthropicAI: Introducing extended thinking for Claude...', time: '5h ago', url: 'https://x.com/AnthropicAI', meta: '1.2K likes' },
+        { source: 'arxiv', title: 'Constitutional AI: A Framework for Harmless AI Systems', time: '1d ago', url: 'https://arxiv.org', meta: 'cs.AI • 45 citations' }
+      ],
+      'openai': [
+        { source: 'news', title: 'OpenAI launches GPT-4o with multimodal capabilities', time: '3h ago', url: 'https://openai.com/blog', meta: '' },
+        { source: 'hn', title: 'Show HN: I built a GPT-4o powered code review tool', time: '6h ago', url: 'https://news.ycombinator.com', meta: '156 points • 42 comments' },
+        { source: 'x', title: '@OpenAI: Sora is now available to Plus subscribers...', time: '1d ago', url: 'https://x.com/OpenAI', meta: '5.4K likes' }
+      ],
+      'google-deepmind': [
+        { source: 'arxiv', title: 'Gemini: A Family of Highly Capable Multimodal Models', time: '1w ago', url: 'https://arxiv.org', meta: 'cs.AI • 128 citations' },
+        { source: 'news', title: 'DeepMind AlphaFold predicts high-res protein structures', time: '2d ago', url: 'https://deepmind.com', meta: '' }
+      ],
+      'nvidia': [
+        { source: 'hn', title: 'NVIDIA announces Blackwell B200 GPU architecture', time: '1d ago', url: 'https://news.ycombinator.com', meta: '567 points • 234 comments' },
+        { source: 'news', title: 'NVIDIA market cap surpasses $3T milestone', time: '3d ago', url: 'https://nvidia.com', meta: '' }
+      ],
+      'meta-ai': [
+        { source: 'hn', title: 'Llama 3.3 70B released with improved reasoning', time: '4h ago', url: 'https://news.ycombinator.com', meta: '423 points • 156 comments' },
+        { source: 'x', title: '@AIatMeta: Open-sourcing our latest multimodal model...', time: '1d ago', url: 'https://x.com/AIatMeta', meta: '3.2K likes' }
+      ]
+    };
+
+    // Return mock data or generate generic feed
+    if (mockFeeds[provider.id]) {
+      return mockFeeds[provider.id];
+    }
+
+    // Generic feed for companies without specific mock data
+    return [
+      { source: 'news', title: `Latest updates from ${provider.name}`, time: 'Recently', url: provider.website || '#', meta: '' },
+      { source: 'hn', title: `Discussion: ${provider.name} in the AI landscape`, time: '1w ago', url: 'https://news.ycombinator.com', meta: '45 points' }
+    ];
   }
 
   function hideDetailPanel() {
@@ -2098,6 +2266,119 @@ Answer questions about LLM providers, pricing, performance, and capabilities. Be
   // EXPORTS
   // ============================================
 
+  // ============================================
+  // ADD COMPANY FORM
+  // ============================================
+
+  function showAddCompanyForm() {
+    const modal = document.getElementById('add-company-modal');
+    if (modal) {
+      modal.classList.add('show');
+    }
+  }
+
+  function hideAddCompanyForm() {
+    const modal = document.getElementById('add-company-modal');
+    if (modal) {
+      modal.classList.remove('show');
+    }
+  }
+
+  function submitNewCompany(event) {
+    event.preventDefault();
+    const form = event.target;
+    const formData = new FormData(form);
+
+    const newCompany = {
+      id: formData.get('name').toLowerCase().replace(/\s+/g, '-'),
+      name: formData.get('name'),
+      logo: formData.get('name').charAt(0).toUpperCase(),
+      color: formData.get('color') || '#3b82f6',
+      status: 'online',
+      location: {
+        lat: parseFloat(formData.get('lat')) || 37.7749,
+        lon: parseFloat(formData.get('lon')) || -122.4194
+      },
+      category: formData.get('category') || 'platform',
+      subcategory: formData.get('subcategory') || 'other',
+      models: formData.get('models') ? formData.get('models').split(',').map(m => m.trim()) : [],
+      pricing: {
+        input: parseFloat(formData.get('priceInput')) || 0,
+        output: parseFloat(formData.get('priceOutput')) || 0,
+        cachedInput: 0
+      },
+      contextWindow: { reported: 128000, actual: 128000 },
+      subscription: { name: 'API', price: 0, tokensIncluded: 'Pay-per-use' },
+      performance: {
+        latency: parseFloat(formData.get('latency')) || 1.0,
+        tokensPerSec: parseInt(formData.get('speed')) || 50
+      },
+      monthlyTokens: 0,
+      trend: 'stable',
+      founded: formData.get('founded') || new Date().getFullYear().toString(),
+      hq: formData.get('hq') || 'Unknown',
+      website: formData.get('website') || '',
+      docs: formData.get('docs') || '',
+      social: {
+        x: formData.get('socialX') || '',
+        linkedin: formData.get('socialLinkedin') || '',
+        github: formData.get('socialGithub') || ''
+      },
+      relationships: {}
+    };
+
+    // Add to providers array
+    LLM_PROVIDERS.push(newCompany);
+
+    // Re-render
+    renderProvidersList();
+    updateFilterCount();
+
+    // Add marker to globe if available
+    if (scene && globe) {
+      addMarkerToGlobe(newCompany);
+    }
+
+    // Close form and show success
+    hideAddCompanyForm();
+    form.reset();
+
+    // Select the new company
+    selectProvider(newCompany.id, true);
+
+    console.log('[Parallel Internet] Added new company:', newCompany.name);
+  }
+
+  function addMarkerToGlobe(provider) {
+    if (!scene || typeof THREE === 'undefined') return;
+
+    const pos = latLonToVector3(provider.location.lat, provider.location.lon, 1.02);
+    const color = new THREE.Color(provider.color);
+
+    const geometry = new THREE.SphereGeometry(0.025, 16, 16);
+    const material = new THREE.MeshBasicMaterial({ color: color });
+    const marker = new THREE.Mesh(geometry, material);
+
+    marker.position.copy(pos);
+    marker.userData = provider;
+
+    globe.add(marker);
+    markers.push(marker);
+
+    // Add glow
+    const glowGeometry = new THREE.SphereGeometry(0.04, 16, 16);
+    const glowMaterial = new THREE.MeshBasicMaterial({
+      color: color,
+      transparent: true,
+      opacity: 0.3
+    });
+    const glow = new THREE.Mesh(glowGeometry, glowMaterial);
+    glow.position.copy(pos);
+    glow.userData.providerId = provider.id;
+    globe.add(glow);
+    glowMeshes.push(glow);
+  }
+
   window.parallelInternet = {
     init,
     selectProvider,
@@ -2116,7 +2397,12 @@ Answer questions about LLM providers, pricing, performance, and capabilities. Be
     unhighlightMarker,
     getDataContext,
     sendChatMessage,
-    clearChat
+    clearChat,
+    // Phase 5: Panel & Form
+    startDragPanel,
+    showAddCompanyForm,
+    hideAddCompanyForm,
+    submitNewCompany
   };
 
   // Initialize when DOM is ready

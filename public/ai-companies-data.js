@@ -27,6 +27,12 @@ const AI_COMPANIES = [
     docs: 'https://docs.anthropic.com',
     employees: 500,
     valuation: 18000000000,
+    social: {
+      x: 'https://x.com/AnthropicAI',
+      linkedin: 'https://linkedin.com/company/anthropicresearch',
+      github: 'https://github.com/anthropics',
+      youtube: 'https://youtube.com/@anthropic-ai'
+    },
     relationships: {
       investors: ['google', 'salesforce', 'spark-capital'],
       partnerships: ['amazon-bedrock', 'google-vertex'],
@@ -56,6 +62,13 @@ const AI_COMPANIES = [
     docs: 'https://platform.openai.com/docs',
     employees: 1500,
     valuation: 86000000000,
+    social: {
+      x: 'https://x.com/OpenAI',
+      linkedin: 'https://linkedin.com/company/openai',
+      github: 'https://github.com/openai',
+      youtube: 'https://youtube.com/@OpenAI',
+      discord: 'https://discord.gg/openai'
+    },
     relationships: {
       investors: ['microsoft', 'khosla-ventures', 'sequoia'],
       partnerships: ['microsoft', 'azure-openai', 'apple'],

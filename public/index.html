@@ -134,6 +134,125 @@
     </div>
   </div>
 
+  <!-- Add Company Button -->
+  <button class="add-company-btn" onclick="window.parallelInternet.showAddCompanyForm()" title="Add Company">+</button>
+
+  <!-- Add Company Modal -->
+  <div id="add-company-modal" class="add-company-modal">
+    <form class="add-company-form" onsubmit="window.parallelInternet.submitNewCompany(event)">
+      <div class="form-header">
+        <h3>Add AI Company</h3>
+        <button type="button" class="form-close" onclick="window.parallelInternet.hideAddCompanyForm()">×</button>
+      </div>
+
+      <div class="form-group">
+        <label>Company Name *</label>
+        <input type="text" name="name" required placeholder="e.g. Acme AI">
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Category</label>
+          <select name="category">
+            <option value="frontier">Frontier Models</option>
+            <option value="inference">Fast Inference</option>
+            <option value="opensource">Open Source</option>
+            <option value="cloud">Cloud Provider</option>
+            <option value="chips">Chip Maker</option>
+            <option value="infrastructure">Infrastructure</option>
+            <option value="tools">Developer Tools</option>
+            <option value="platform" selected>Platform</option>
+            <option value="enterprise">Enterprise</option>
+            <option value="search">Search</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Founded Year</label>
+          <input type="text" name="founded" placeholder="2024">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Headquarters</label>
+          <input type="text" name="hq" placeholder="San Francisco, CA">
+        </div>
+        <div class="form-group">
+          <label>Brand Color</label>
+          <input type="color" name="color" value="#3b82f6">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Latitude</label>
+          <input type="number" name="lat" step="0.0001" placeholder="37.7749">
+        </div>
+        <div class="form-group">
+          <label>Longitude</label>
+          <input type="number" name="lon" step="0.0001" placeholder="-122.4194">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Models (comma-separated)</label>
+        <input type="text" name="models" placeholder="Model-1, Model-2, Model-3">
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Input Price ($/1M tokens)</label>
+          <input type="number" name="priceInput" step="0.01" placeholder="1.00">
+        </div>
+        <div class="form-group">
+          <label>Output Price ($/1M tokens)</label>
+          <input type="number" name="priceOutput" step="0.01" placeholder="2.00">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Speed (tokens/sec)</label>
+          <input type="number" name="speed" placeholder="100">
+        </div>
+        <div class="form-group">
+          <label>Latency (seconds)</label>
+          <input type="number" name="latency" step="0.1" placeholder="1.0">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Website URL</label>
+        <input type="url" name="website" placeholder="https://example.com">
+      </div>
+
+      <div class="form-group">
+        <label>Documentation URL</label>
+        <input type="url" name="docs" placeholder="https://docs.example.com">
+      </div>
+
+      <div style="font-size: 11px; color: rgba(255,255,255,0.6); margin: 16px 0 8px; text-transform: uppercase;">Social Media</div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>X (Twitter)</label>
+          <input type="url" name="socialX" placeholder="https://x.com/company">
+        </div>
+        <div class="form-group">
+          <label>LinkedIn</label>
+          <input type="url" name="socialLinkedin" placeholder="https://linkedin.com/company/name">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>GitHub</label>
+        <input type="url" name="socialGithub" placeholder="https://github.com/company">
+      </div>
+
+      <button type="submit" class="form-submit">Add Company</button>
+    </form>
+  </div>
+
   <script src="lib/three.min.js"></script>
   <script src="ai-companies-data.js"></script>
   <script src="parallel-internet.js"></script>
