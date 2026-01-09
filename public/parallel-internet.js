@@ -20,10 +20,11 @@
   let comparedProviders = [];
 
   // ============================================
-  // LLM PROVIDERS DATA
+  // DATA SOURCE (loaded from ai-companies-data.js)
   // ============================================
 
-  const LLM_PROVIDERS = [
+  // Use external AI_COMPANIES if available, otherwise fallback
+  const LLM_PROVIDERS = (typeof AI_COMPANIES !== 'undefined') ? AI_COMPANIES : [
     {
       id: 'anthropic',
       name: 'Anthropic',
@@ -960,6 +961,218 @@
     cards.forEach(card => card.classList.remove('globe-hovered'));
   }
 
+  // ============================================
+  // CONNECTION LINES (RELATIONSHIPS)
+  // ============================================
+
+  let connectionLines = [];
+  let connectionLabels = [];
+
+  function drawConnectionLines(providerId) {
+    clearConnectionLines();
+
+    const provider = LLM_PROVIDERS.find(p => p.id === providerId);
+    if (!provider || !provider.relationships) return;
+
+    const sourceMarker = markers.find(m => m.userData.id === providerId);
+    if (!sourceMarker) return;
+
+    const relationships = provider.relationships;
+    const allRelatedIds = new Set();
+
+    // Collect all related company IDs
+    Object.values(relationships).forEach(relArray => {
+      if (Array.isArray(relArray)) {
+        relArray.forEach(id => allRelatedIds.add(id));
+      }
+    });
+
+    // Draw lines to each related company that exists in our data
+    allRelatedIds.forEach(relatedId => {
+      const relatedProvider = LLM_PROVIDERS.find(p => p.id === relatedId);
+      if (!relatedProvider) return;
+
+      const targetMarker = markers.find(m => m.userData.id === relatedId);
+      if (!targetMarker) return;
+
+      // Determine relationship type for color
+      let lineColor = 0x3b82f6; // default blue
+      let relType = 'connected';
+
+      for (const [type, ids] of Object.entries(relationships)) {
+        if (Array.isArray(ids) && ids.includes(relatedId)) {
+          relType = type;
+          switch(type) {
+            case 'investors':
+            case 'investors_in':
+              lineColor = 0x22c55e; // green for investment
+              break;
+            case 'partnerships':
+              lineColor = 0x3b82f6; // blue for partnerships
+              break;
+            case 'competes_with':
+              lineColor = 0xef4444; // red for competition
+              break;
+            case 'integrations':
+            case 'integrates_with':
+              lineColor = 0xa855f7; // purple for integrations
+              break;
+            case 'runs_models_from':
+            case 'models_used_by':
+            case 'hosts_models_from':
+              lineColor = 0xf59e0b; // orange for model usage
+              break;
+            case 'supplies_chips_to':
+            case 'uses_chips_from':
+              lineColor = 0x06b6d4; // cyan for hardware
+              break;
+            case 'acquired':
+            case 'acquired_by':
+              lineColor = 0xec4899; // pink for acquisitions
+              break;
+            default:
+              lineColor = 0x6b7280; // gray for other
+          }
+          break;
+        }
+      }
+
+      // Create curved line using QuadraticBezierCurve3
+      const start = sourceMarker.position.clone();
+      const end = targetMarker.position.clone();
+
+      // Calculate midpoint and push it outward for curve
+      const mid = start.clone().add(end).multiplyScalar(0.5);
+      const midLength = mid.length();
+      mid.normalize().multiplyScalar(midLength * 1.3); // Push out for arc
+
+      const curve = new THREE.QuadraticBezierCurve3(start, mid, end);
+      const points = curve.getPoints(30);
+      const geometry = new THREE.BufferGeometry().setFromPoints(points);
+
+      const material = new THREE.LineBasicMaterial({
+        color: lineColor,
+        transparent: true,
+        opacity: 0.6,
+        linewidth: 2
+      });
+
+      const line = new THREE.Line(geometry, material);
+      line.userData = { relType, targetId: relatedId };
+      scene.add(line);
+      connectionLines.push(line);
+
+      // Highlight the connected marker
+      targetMarker.scale.setScalar(1.3);
+    });
+  }
+
+  function clearConnectionLines() {
+    connectionLines.forEach(line => {
+      scene.remove(line);
+      line.geometry.dispose();
+      line.material.dispose();
+    });
+    connectionLines = [];
+
+    // Reset marker scales
+    markers.forEach(m => {
+      if (m.userData.id !== selectedProvider) {
+        m.scale.setScalar(1);
+      }
+    });
+  }
+
+  function getRelationshipSummary(provider) {
+    if (!provider.relationships) return null;
+
+    const summary = [];
+    const r = provider.relationships;
+
+    if (r.investors?.length) {
+      summary.push({ type: 'Investors', ids: r.investors, color: '#22c55e' });
+    }
+    if (r.investors_in?.length) {
+      summary.push({ type: 'Invested In', ids: r.investors_in, color: '#22c55e' });
+    }
+    if (r.partnerships?.length) {
+      summary.push({ type: 'Partners', ids: r.partnerships, color: '#3b82f6' });
+    }
+    if (r.competes_with?.length) {
+      summary.push({ type: 'Competitors', ids: r.competes_with, color: '#ef4444' });
+    }
+    if (r.integrations?.length || r.integrates_with?.length) {
+      summary.push({ type: 'Integrations', ids: r.integrations || r.integrates_with, color: '#a855f7' });
+    }
+    if (r.runs_models_from?.length) {
+      summary.push({ type: 'Runs Models From', ids: r.runs_models_from, color: '#f59e0b' });
+    }
+    if (r.models_used_by?.length) {
+      summary.push({ type: 'Models Used By', ids: r.models_used_by, color: '#f59e0b' });
+    }
+    if (r.hosts_models_from?.length) {
+      summary.push({ type: 'Hosts Models From', ids: r.hosts_models_from, color: '#f59e0b' });
+    }
+    if (r.supplies_chips_to?.length) {
+      summary.push({ type: 'Supplies Chips To', ids: r.supplies_chips_to, color: '#06b6d4' });
+    }
+    if (r.uses_chips_from?.length) {
+      summary.push({ type: 'Uses Chips From', ids: r.uses_chips_from, color: '#06b6d4' });
+    }
+    if (r.acquired?.length) {
+      summary.push({ type: 'Acquired', ids: r.acquired, color: '#ec4899' });
+    }
+    if (r.acquired_by?.length) {
+      summary.push({ type: 'Acquired By', ids: r.acquired_by, color: '#ec4899' });
+    }
+    if (r.parent?.length) {
+      summary.push({ type: 'Parent Company', ids: r.parent, color: '#8b5cf6' });
+    }
+
+    return summary;
+  }
+
+  function renderRelationshipsPanel(provider) {
+    const panel = document.getElementById('provider-detail-panel');
+    if (!panel) return;
+
+    const relationships = getRelationshipSummary(provider);
+    if (!relationships || relationships.length === 0) return '';
+
+    let html = `<div class="relationships-section" style="margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.1);">
+      <h4 style="font-size: 13px; font-weight: 600; margin-bottom: 12px; color: #fff;">
+        🔗 Industry Connections
+      </h4>`;
+
+    relationships.forEach(rel => {
+      html += `<div class="rel-group" style="margin-bottom: 12px;">
+        <div style="font-size: 10px; color: ${rel.color}; font-weight: 600; margin-bottom: 6px; text-transform: uppercase;">
+          ${rel.type}
+        </div>
+        <div style="display: flex; flex-wrap: wrap; gap: 6px;">`;
+
+      rel.ids.forEach(id => {
+        const company = LLM_PROVIDERS.find(p => p.id === id);
+        const name = company ? company.name : id;
+        const color = company ? company.color : '#666';
+
+        html += `<span class="rel-chip" onclick="window.parallelInternet.selectProvider('${id}', true)"
+          style="padding: 4px 10px; background: ${color}20; border: 1px solid ${color}40;
+                 border-radius: 12px; font-size: 11px; cursor: pointer; color: #fff;
+                 transition: all 0.2s;"
+          onmouseover="this.style.background='${color}40'"
+          onmouseout="this.style.background='${color}20'">
+          ${name}
+        </span>`;
+      });
+
+      html += `</div></div>`;
+    });
+
+    html += `</div>`;
+    return html;
+  }
+
   function checkClick(event) {
     const rect = renderer.domElement.getBoundingClientRect();
     mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
@@ -1160,10 +1373,11 @@
           Monthly Usage: <span style="color: #22c55e; font-weight: 600;">${formatNumber(provider.monthlyTokens)} tokens</span>
         </div>
       </div>
+
+      ${renderRelationshipsPanel(provider) || ''}
     `;
 
     panel.style.display = 'block';
-    drawConnectionLine(provider);
   }
 
   function hideDetailPanel() {
@@ -1510,6 +1724,11 @@
       }
     });
 
+    // Draw connection lines to related companies
+    if (scene) {
+      drawConnectionLines(providerId);
+    }
+
     if (showPanel) {
       const provider = LLM_PROVIDERS.find(p => p.id === providerId);
       if (provider) {
@@ -1548,6 +1767,11 @@
     hideDetailPanel();
     renderProvidersList();
     renderPerformanceChart();
+
+    // Clear connection lines
+    if (scene) {
+      clearConnectionLines();
+    }
 
     markers.forEach(marker => {
       marker.scale.setScalar(1);
